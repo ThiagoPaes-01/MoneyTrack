@@ -13,19 +13,25 @@ export function useLoginStyles() {
       backgroundColor: "#1a2a3a",
     },
 
+    wrapper: {
+      flex: 1,
+      backgroundColor: "#1a2a3a",
+    },
+
+
     header: {
       backgroundColor: "#1a2a3a",
       alignItems: "center",
       justifyContent: "center",
-      paddingTop: rs(48),
-      paddingBottom: rs(24),
+      paddingTop: rs(-10),
+      paddingBottom: rs(-10),
       paddingHorizontal: rs(20),
-      minHeight: height * 0.35,
+      // sem height fixo — cresce com o conteúdo mas não empurra o containerMid
     },
 
     logo: {
-      height: rs(160),   
-      width: rs(280),  
+      height: rs(240),
+      width: rs(320),
       resizeMode: "contain",
     },
 
@@ -37,13 +43,17 @@ export function useLoginStyles() {
     },
 
     containerMid: {
-      flex: 1,
+      flex: 1, // ← ocupa todo espaço restante, independente do header
       backgroundColor: "#ffffff",
       borderTopLeftRadius: rs(28),
       borderTopRightRadius: rs(28),
+    },
+
+    containerMidContent: {
       paddingHorizontal: rs(24),
       paddingTop: rs(28),
-      paddingBottom: rs(32),
+      paddingBottom: rs(45),
+      flexGrow: 1,
     },
 
     bem_vindo: {
@@ -115,7 +125,7 @@ export function useLoginStyles() {
     },
 
     botaosocial: {
-      flex: 1,  // cada botão ocupa metade do espaço disponível
+      flex: 1,
     },
 
     cadastre: {
