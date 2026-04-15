@@ -3,13 +3,13 @@ import { StyleSheet } from "react-native";
 import { useWindowDimensions } from "react-native";
 
 export function useLoginStyles() {
-  const { width, height } = useWindowDimensions(); // ← reativo, atualiza automaticamente
+  const { width, height } = useWindowDimensions(); 
   const scale = width / 375;
   const rs = (size) => Math.round(size * scale);
 
   return StyleSheet.create({
     container: {
-      flexGrow: 1, // permite scroll mas ocupa tela toda quando não precisar
+      flexGrow: 1, 
     },
     wrapper: {
       flex: 1,
@@ -18,7 +18,7 @@ export function useLoginStyles() {
 
     scrollView: {
       flex: 1,
-      backgroundColor: "#1a2a3a", // mesma cor do header
+      backgroundColor: "#1a2a3a", 
     },
     header: {
       backgroundColor: "#1a2a3a",
@@ -27,7 +27,6 @@ export function useLoginStyles() {
       paddingTop: rs(38),
       paddingBottom: rs(14),
       paddingHorizontal: rs(20),
-      // sem height fixo — cresce com o conteúdo mas não empurra o containerMid
     },
 
     logo: {
