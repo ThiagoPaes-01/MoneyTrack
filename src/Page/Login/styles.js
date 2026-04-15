@@ -9,22 +9,23 @@ export function useLoginStyles() {
 
   return StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: "#1a2a3a",
+      flexGrow: 1, // permite scroll mas ocupa tela toda quando não precisar
     },
-
     wrapper: {
       flex: 1,
       backgroundColor: "#1a2a3a",
     },
 
-
+    scrollView: {
+      flex: 1,
+      backgroundColor: "#1a2a3a", // mesma cor do header
+    },
     header: {
       backgroundColor: "#1a2a3a",
       alignItems: "center",
       justifyContent: "center",
-      paddingTop: rs(-10),
-      paddingBottom: rs(-10),
+      paddingTop: rs(38),
+      paddingBottom: rs(14),
       paddingHorizontal: rs(20),
       // sem height fixo — cresce com o conteúdo mas não empurra o containerMid
     },
@@ -43,15 +44,18 @@ export function useLoginStyles() {
     },
 
     containerMid: {
-      flex: 1, // ← ocupa todo espaço restante, independente do header
+      flex: 1,
       backgroundColor: "#ffffff",
       borderTopLeftRadius: rs(28),
       borderTopRightRadius: rs(28),
+      paddingHorizontal: rs(24),
+      paddingTop: rs(28),
+      paddingBottom: rs(32),
     },
 
     containerMidContent: {
       paddingHorizontal: rs(24),
-      paddingTop: rs(28),
+      paddingTop: rs(10),
       paddingBottom: rs(45),
       flexGrow: 1,
     },

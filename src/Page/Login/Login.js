@@ -5,16 +5,18 @@ import { LinkText } from "../../components/Link/link";
 import Logo from "../../assets/Logo.png";
 import { useLoginStyles } from "./styles";
 
-
 export function Login({ navigation }) {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
-
   const styles = useLoginStyles();
 
   return (
-    <View style={styles.wrapper}>
-      {/* Header fixo */}
+    <ScrollView
+      style={styles.scrollView}
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Header */}
       <View style={styles.header}>
         <Image source={Logo} style={styles.logo} />
         <Text style={styles.slogan}>
@@ -22,11 +24,9 @@ export function Login({ navigation }) {
         </Text>
       </View>
 
-      <ScrollView
-        style={styles.containerMid}
-        contentContainerStyle={styles.containerMidContent}
-        showsVerticalScrollIndicator={false}
-      >
+      {/* Container branco */}
+      <View style={styles.containerMid}>
+        {/* Bem-vindo */}
         <View style={styles.bem_vindo}>
           <Text style={styles.bemVindoTitulo}>Bem-vindo de volta</Text>
           <Text style={styles.bemVindoSubtitulo}>
@@ -36,7 +36,6 @@ export function Login({ navigation }) {
 
         {/* Formulário */}
         <View style={styles.form}>
-          {/* E-mail */}
           <Text style={styles.label}>E-mail</Text>
           <View style={styles.boxInput}>
             <TextInput
@@ -50,7 +49,6 @@ export function Login({ navigation }) {
             />
           </View>
 
-          {/* Senha */}
           <Text style={styles.label}>Senha</Text>
           <View style={styles.boxInput}>
             <TextInput
@@ -63,28 +61,23 @@ export function Login({ navigation }) {
             />
           </View>
 
-          {/* Esqueceu a senha */}
           <LinkText
             style={styles.esqueceuSenha}
             title="Esqueceu a senha?"
             onPress={() => console.log("Ir para recuperação de senha")}
           />
 
-          {/* Botão entrar */}
           <Button title="Entrar" />
 
-          {/* Divisor */}
           <View style={styles.divider}>
             <Text style={styles.continueCom}>ou continue com</Text>
           </View>
 
-          {/* Login social */}
           <View style={styles.outrosLogin}>
             <Button title="Google" style={styles.botaosocial} />
             <Button title="Apple" style={styles.botaosocial} />
           </View>
 
-          {/* Link cadastro */}
           <Text style={styles.cadastre}>
             Não tem conta?
             <LinkText
@@ -93,7 +86,7 @@ export function Login({ navigation }) {
             />
           </Text>
         </View>
-      </ScrollView>
-    </View>
+      </View>
+    </ScrollView>
   );
 }
