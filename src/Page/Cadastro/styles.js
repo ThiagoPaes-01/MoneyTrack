@@ -1,102 +1,134 @@
 import { StyleSheet } from "react-native";
 import { color } from "../../Global/color";
+import { useWindowDimensions } from "react-native";
 
-export const styles = StyleSheet.create({
-  containerMain: {
-    flex: 1,
-    backgroundColor: color.colors.brandDark,
-  },
+export function useCadastroStyles() {
+  const { width, height } = useWindowDimensions();
+  const isDesktop = width >= 768;
+  const scale = isDesktop ? 1 : width / 375;
+  const rs = (size) => Math.round(size * scale);
 
-  boxLogo: {
-    backgroundColor: color.colors.brandDark,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingTop: 48,
-    paddingBottom: 24,
-    paddingHorizontal: 20,
-  },
+  return StyleSheet.create({
+    containerMain: {
+      flexGrow: 1,
+      flexDirection: isDesktop ? "row" : "column", // ← duas colunas no desktop
+      width: "100%",
+      backgroundColor: color.colors.brandDark,
+    },
 
-  logo: {
-    height: 260,
-    width: 280,
-    marginTop: -80,
-  },
+    boxLogo: {
+      backgroundColor: "#1a2a3a",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: rs(20),
+      // mobile: faixa no topo | desktop: coluna esquerda
+      height: isDesktop ? "100vh" : undefined,
+      width: isDesktop ? "45%" : "100%",
+      paddingTop: isDesktop ? 0 : rs(38),
+      paddingBottom: isDesktop ? 0 : rs(14),
+    },
 
-  frase: {
-    fontSize: 13,
-    color: color.colors.gray200,
-    marginTop: -90,
-    textAlign: "center",
-  },
+    logo: {
+      height: 260,
+      width: 280,
+      marginTop: -80,
+    },
 
-  containerForm: {
-    flex: 1,
-    backgroundColor: color.colors.white,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    marginTop: 5,
-    paddingHorizontal: 24,
-    paddingTop: 24,
-    paddingBottom: 32,
-  },
+    frase: {
+      fontSize: 13,
+      color: color.colors.gray200,
+      marginTop: -90,
+      textAlign: "center",
+    },
 
-  label: {
-    fontSize: 13,
-    color: color.colors.textPrimary,
-    marginBottom: 6,
-    marginTop: 14,
-  },
+    form: {
+      width: rs(400),
+      flex: 1,
+      maxWidth: isDesktop ? undefined : "98%"
+    },
 
-  boxInput: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: color.colors.background,
-    borderWidth: 1,
-    borderColor: color.colors.border,
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    height: 48,
-  },
+    containerForm: {
+      flex: 1,
+      backgroundColor: "#ffffff",
 
-  boxInputFocused: {
-    borderColor: color.colors.brandBlue,
-    backgroundColor: color.colors.blue50,
-  },
+      // mobile: arredonda topo | desktop: arredonda esquerda
+      borderTopLeftRadius: isDesktop ? 0 : rs(28),
+      borderTopRightRadius: isDesktop ? 0 : rs(28),
+      borderBottomLeftRadius: isDesktop ? rs(28) : 0,  // não tem efeito mas fica semântico
 
-  input: {
-    flex: 1,
-    fontSize: 14,
-    color: color.colors.textPrimary,
-  },
+      paddingHorizontal: isDesktop ? 48 : rs(24),
+      paddingTop: isDesktop ? 60 : rs(28),
+      paddingBottom: isDesktop ? 60 : rs(32),
 
-  btnCriar: {
-    backgroundColor: color.colors.brandGreen,
-    borderRadius: 12,
-    height: 52,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-    marginTop: 16,
-    padding: 20,
-  },
+      // desktop: centraliza o formulário verticalmente
+      justifyContent: isDesktop ? "center" : "flex-start",
+      alignItems: isDesktop ? "center" : "flex-start",
+    },
 
-  btnCriarText: {
-    color: color.colors.white,
-    fontSize: 15,
-    fontWeight: "700",
-  },
+    registre: {
+      fontSize: isDesktop ? 28 : rs(22),
+      fontWeight: "700", color: "#111827",
+      marginBottom: rs(80)
+    },
 
-  jaTemConta: {
-    textAlign: "center",
-    fontSize: 13,
-    color: color.colors.textSecondary,
-    marginTop: 20,
-  },
+    label: {
+      fontSize: 13,
+      color: color.colors.textPrimary,
+      marginBottom: 6,
+      marginTop: 14,
+    },
 
-  jaTemContaLink: {
-    color: color.colors.brandBlue,
-    fontWeight: "600",
-  },
+    boxInput: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: color.colors.background,
+      borderWidth: 1,
+      borderColor: color.colors.border,
+      borderRadius: 10,
+      paddingHorizontal: 12,
+      height: 48,
+    },
 
-});
+    boxInputFocused: {
+      borderColor: color.colors.brandBlue,
+      backgroundColor: color.colors.blue50,
+    },
+
+    input: {
+      flex: 1,
+      fontSize: 14,
+      color: color.colors.textPrimary,
+    },
+
+    btnCriar: {
+      backgroundColor: color.colors.brandGreen,
+      borderRadius: 12,
+      height: 52,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 10,
+      marginTop: 16,
+      padding: 20,
+    },
+
+    btnCriarText: {
+      color: color.colors.gray50,
+      fontSize: 15,
+      fontWeight: "700",
+    },
+
+    jaTemConta: {
+      textAlign: "center",
+      fontSize: 13,
+      color: color.colors.textSecondary,
+      marginTop: 20,
+    },
+
+    jaTemContaLink: {
+      color: color.colors.brandBlue,
+      fontWeight: "600",
+    },
+
+  });
+}

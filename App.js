@@ -7,7 +7,7 @@ export default function App() {
   return (
     <View style={styles.root}>
       <StatusBar style="auto" />
-      <Login />
+      <Cadastro />
     </View>
   );
 }
