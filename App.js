@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import { Login } from "./src/Page/Login/Login";
+import { Cadastro } from "./src/Page/Cadastro/Cadastro";
 
 export default function App() {
   return (

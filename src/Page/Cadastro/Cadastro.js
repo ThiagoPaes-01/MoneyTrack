@@ -3,6 +3,7 @@ import { useState } from "react";
 import { styles } from "./styles";
 import { LinkText } from "../../components/Link/link";
 import Logo from "../../assets/Logo.png";
+import { Button } from "../../components/Button/button";
 
 export function Cadastro({ navigation }) {
   const [nome, setNome] = useState("");
@@ -16,6 +17,11 @@ export function Cadastro({ navigation }) {
         <Text style={styles.frase}>Crie sua conta gratuitamente</Text>
       </View>
 
+      <View>
+        <Button title="Entrar"/>
+        <Button title="Cadastro"/>
+      </View>
+      
       <View style={styles.containerForm}>
 
         {/* Nome */}
