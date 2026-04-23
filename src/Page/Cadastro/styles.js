@@ -68,7 +68,7 @@ export function useCadastroStyles() {
     registre: {
       fontSize: isDesktop ? 28 : rs(22),
       fontWeight: "700", color: "#111827",
-      marginBottom: rs(80)
+      marginBottom: rs(30)
     },
 
     label: {

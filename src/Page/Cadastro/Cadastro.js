@@ -62,7 +62,18 @@ export function Cadastro({ navigation }) {
               secureTextEntry
             />
           </View>
-
+          <Text style={styles.label}>Confirmar senha</Text>
+          <View style={styles.boxInput}>
+            <TextInput
+              style={styles.input}
+              value={password}
+              onChangeText={setPassword}
+              placeholder="Confirme a senha"
+              placeholderTextColor="#AAAAAA"
+              secureTextEntry
+            />
+            
+          </View>
 
           {/* Botão criar conta */}
           <TouchableOpacity
