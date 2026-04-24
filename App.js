@@ -2,12 +2,13 @@ import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import { Login } from "./src/Page/Login/Login";
 import { Cadastro } from "./src/Page/Cadastro/Cadastro";
+import { Bancos } from "./src/Page/Bancos/Bancos";
 
 export default function App() {
   return (
     <View style={styles.root}>
       <StatusBar style="auto" />
-      <Cadastro />
+      <Bancos />
     </View>
   );
 }

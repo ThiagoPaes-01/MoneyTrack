@@ -1,4 +1,6 @@
-import { View, Text, Image, TextInput, TouchableOpacity } from "react-native";
+// screens/Bancos/Bancos.js
+import { View, Text, Image, ScrollView } from "react-native";
+import { Button } from "../../components/Button/button";
 import iconBancoDoBrasil from "../../assets/iconBancoDoBrasil.png";
 import iconBradesco from "../../assets/iconBradesco.png";
 import iconC6Bank from "../../assets/iconC6Bank.png";
@@ -8,11 +10,26 @@ import iconItau from "../../assets/iconItau.jpg";
 import iconNubank from "../../assets/iconNubank.jpg";
 import iconPicPay from "../../assets/iconPicPay.png";
 import iconSantander from "../../assets/iconSantander.png";
-import { styles } from "./styles";
+import { useBancosStyles } from "./styles";
 
-export function Bancos() {
+const BANCOS = [
+  { nome: "Nubank", icon: iconNubank },
+  { nome: "Itaú", icon: iconItau },
+  { nome: "Bradesco", icon: iconBradesco },
+  { nome: "Banco do Brasil", icon: iconBancoDoBrasil },
+  { nome: "Santander", icon: iconSantander },
+  { nome: "Inter", icon: iconInter },
+  { nome: "PicPay", icon: iconPicPay },
+  { nome: "C6 Bank", icon: iconC6Bank },
+  { nome: "Caixa", icon: iconCaixa },
+];
+
+export function Bancos({ navigation }) {
+  const styles = useBancosStyles();
+
   return (
     <View style={styles.containerMain}>
+      {/* Header */}
       <View style={styles.containerHeader}>
         <Text style={styles.textConect}>Conecte o seu banco</Text>
         <Text style={styles.textDados}>
@@ -20,56 +37,29 @@ export function Bancos() {
         </Text>
       </View>
 
-      <View style={styles.containerMid}>
-        <TouchableOpacity style={styles.buttonBanco}>
-          <Image source={iconNubank} style={styles.logoBanco} />
-          <Text style={styles.textBanco}>Nubank</Text>
-        </TouchableOpacity>
+      {/* Lista de bancos */}
+      <ScrollView
+        contentContainerStyle={styles.containerMid}
+        showsVerticalScrollIndicator={false}
+      >
+        {BANCOS.map((banco) => (
+          <Button
+            key={banco.nome}
+            title={banco.nome}
+            style={styles.buttonBanco}
+            textStyle={styles.textBanco}
+            leftIcon={<Image source={banco.icon} style={styles.logoBanco} />}
+            onPress={() => {}}
+          />
+        ))}
+      </ScrollView>
 
-        <TouchableOpacity style={styles.buttonBanco}>
-          <Image source={iconItau} style={styles.logoBanco} />
-          <Text style={styles.textBanco}>Itaú</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonBanco}>
-          <Image source={iconBradesco} style={styles.logoBanco} />
-          <Text style={styles.textBanco}>Bradesco</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonBanco}>
-          <Image source={iconBancoDoBrasil} style={styles.logoBanco} />
-          <Text style={styles.textBanco}>Banco do Brasil</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonBanco}>
-          <Image source={iconSantander} style={styles.logoBanco} />
-          <Text style={styles.textBanco}>Santander</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonBanco}>
-          <Image source={iconInter} style={styles.logoBanco} />
-          <Text style={styles.textBanco}>Inter</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonBanco}>
-          <Image source={iconPicPay} style={styles.logoBanco} />
-          <Text style={styles.textBanco}>PicPay</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonBanco}>
-          <Image source={iconC6Bank} style={styles.logoBanco} />
-          <Text style={styles.textBanco}>C6 Bank</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.buttonBanco}>
-          <Image source={iconCaixa} style={styles.logoBanco} />
-          <Text style={styles.textBanco}>Caixa</Text>
-        </TouchableOpacity>
-      </View>
-
-      <TouchableOpacity style={styles.buttonConectar}>
-        <Text>Conectar e entrar no app</Text>
-      </TouchableOpacity>
+      {/* Botão conectar */}
+      <Button
+        title="Conectar e entrar no app"
+        style={styles.buttonConectar}
+        onPress={() => navigation.navigate("Home")}
+      />
     </View>
   );
 }

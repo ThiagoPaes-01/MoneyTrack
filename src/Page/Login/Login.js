@@ -1,7 +1,9 @@
+// screens/Login/Login.js
 import { useState } from "react";
-import { View, Text, TextInput, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView } from "react-native";
 import { Button } from "../../components/Button/button";
 import { LinkText } from "../../components/Link/link";
+import { Input } from "../../components/Input/input";
 import Logo from "../../assets/Logo.png";
 import { useLoginStyles } from "./styles";
 
@@ -27,7 +29,7 @@ export function Login({ navigation }) {
       {/* Container branco */}
       <View style={styles.containerMid}>
         {/* Bem-vindo */}
-        <View style={styles.bem_vindo}>
+        <View style={styles.bemVindo}>
           <Text style={styles.bemVindoTitulo}>Bem-vindo de volta</Text>
           <Text style={styles.bemVindoSubtitulo}>
             Acesse sua conta para continuar
@@ -38,12 +40,10 @@ export function Login({ navigation }) {
         <View style={styles.form}>
           <Text style={styles.label}>E-mail</Text>
           <View style={styles.boxInput}>
-            <TextInput
-              style={styles.input}
+            <Input
               onChangeText={setUserName}
               value={username}
               placeholder="Seu melhor e-mail"
-              placeholderTextColor="#AAAAAA"
               keyboardType="email-address"
               autoCapitalize="none"
             />
@@ -51,12 +51,10 @@ export function Login({ navigation }) {
 
           <Text style={styles.label}>Senha</Text>
           <View style={styles.boxInput}>
-            <TextInput
-              style={styles.input}
+            <Input
               onChangeText={setPassword}
               value={password}
               placeholder="Sua senha"
-              placeholderTextColor="#AAAAAA"
               secureTextEntry
             />
           </View>
@@ -67,21 +65,21 @@ export function Login({ navigation }) {
             onPress={() => console.log("Ir para recuperação de senha")}
           />
 
-          <Button title="Entrar" />
+          <Button title="Entrar" onPress={() => {}} />
 
           <View style={styles.divider}>
             <Text style={styles.continueCom}>ou continue com</Text>
           </View>
 
           <View style={styles.outrosLogin}>
-            <Button title="Google" style={styles.botaosocial} />
-            <Button title="Apple" style={styles.botaosocial} />
+            <Button title="Google" style={styles.botaoSocial} />
+            <Button title="Apple" style={styles.botaoSocial} />
           </View>
 
           <Text style={styles.cadastre}>
-            Não tem conta?
+            Não tem conta?{" "}
             <LinkText
-              title=" Cadastre-se"
+              title="Cadastre-se"
               onPress={() => navigation.navigate("Cadastro")}
             />
           </Text>
