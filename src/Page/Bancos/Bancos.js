@@ -82,7 +82,6 @@ export function Bancos({ navigation }) {
       <View style={styles.desktopBg}>
         <View style={styles.phoneFrame}>
           {content}
-          <View style={styles.homeIndicator} />
         </View>
       </View>
     );

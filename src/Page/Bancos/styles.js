@@ -14,7 +14,7 @@ export function useBancosStyles() {
   const COLS = 3;
 
   const containerWidth = isDesktop ? PHONE_WIDTH : width;
-  const cardWidth = (containerWidth - PADDING * 2 - GAP * (COLS - 1)) / COLS;
+  const cardWidth = (containerWidth - PADDING * 2 - GAP * (COLS - 0)) / COLS;
 
   return StyleSheet.create({
     // ─── DESKTOP BG ──────────────────────────────────────────
@@ -28,7 +28,7 @@ export function useBancosStyles() {
     // ─── PHONE FRAME (desktop) ────────────────────────────────
     phoneFrame: {
       width: PHONE_WIDTH, // 390px — largura fixa de celular
-      maxHeight: "88vh",
+      maxHeight: "93vh",
       backgroundColor: "#111318",
       borderRadius: 48,
       borderWidth: 1.5,

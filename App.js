@@ -9,7 +9,7 @@ export default function App() {
   return (
     <View style={styles.root}>
       <StatusBar style="auto" />
-      <Cadastro />
+      <Bancos />
     </View>
   );
 }

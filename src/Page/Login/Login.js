@@ -63,6 +63,7 @@ export function Login({ navigation }) {
             <Text style={styles.label}>E-mail</Text>
             <View style={styles.boxInput}>
               <Input
+                style={styles.Input}
                 onChangeText={setUserName}
                 value={username}
                 placeholder="seu@email.com"
@@ -75,9 +76,10 @@ export function Login({ navigation }) {
             <Text style={styles.label}>Senha</Text>
             <View style={styles.boxInput}>
               <Input
+                style={styles.Input}
                 onChangeText={setPassword}
                 value={password}
-                placeholder="*******"
+                placeholder="senha"
                 secureTextEntry
               />
             </View>

@@ -1,5 +1,6 @@
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { color } from "../../Global/color";
+import { Input } from "../../components/Input/input";
 
 const c = color.colors;
 
@@ -170,6 +171,7 @@ export function useLoginStyles() {
     // ─── INPUTS ──────────────────────────────────────────────
     boxInput: {
       backgroundColor: "#1e2330",
+      color: c.white,
       borderRadius: 14,
       borderWidth: 1,
       borderColor: "rgba(255,255,255,0.08)",
@@ -177,6 +179,10 @@ export function useLoginStyles() {
       paddingVertical: 14,
       flexDirection: "row",
       alignItems: "center",
+    },
+
+    Input: {
+      color: c.white,
     },
 
     // ─── ESQUECEU SENHA ───────────────────────────────────────

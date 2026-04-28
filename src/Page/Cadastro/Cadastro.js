@@ -30,15 +30,7 @@ export function Cadastro({ navigation }) {
     >
       <View style={styles.phoneFrame}>
         {/* Notch e Status bar — só no desktop */}
-        {isDesktop && (
-          <>
-            <View style={styles.notch} />
-            <View style={styles.statusBar}>
-              <Text style={styles.statusTime}>9:41</Text>
-              <Text style={styles.statusSignal}>●●● 100%</Text>
-            </View>
-          </>
-        )}
+
 
         {/* ── Header — logo + frase ── */}
         <View style={styles.header}>
@@ -50,13 +42,14 @@ export function Cadastro({ navigation }) {
         <View style={styles.containerForm}>
           <View style={styles.bemVindo}>
             <Text style={styles.registre}>Registre-se</Text>
-            <Text style={styles.registreSubtitulo}>para continuar</Text>
+            <Text style={styles.registreSubtitulo}>Crie uma conta para continuar</Text>
           </View>
 
           <View style={styles.form}>
             <Text style={styles.label}>Nome completo</Text>
             <View style={styles.boxInput}>
               <Input
+                style={styles.Inputs}
                 value={nome}
                 onChangeText={setNome}
                 placeholder="Digite seu nome completo"
@@ -67,6 +60,7 @@ export function Cadastro({ navigation }) {
             <Text style={styles.label}>E-mail</Text>
             <View style={styles.boxInput}>
               <Input
+                style={styles.Inputs}
                 value={email}
                 onChangeText={setEmail}
                 placeholder="seu@email.com"
@@ -78,6 +72,7 @@ export function Cadastro({ navigation }) {
             <Text style={styles.label}>Senha</Text>
             <View style={styles.boxInput}>
               <Input
+                style={styles.Inputs}
                 value={password}
                 onChangeText={setPassword}
                 placeholder="Crie uma senha"
@@ -88,6 +83,7 @@ export function Cadastro({ navigation }) {
             <Text style={styles.label}>Confirmar senha</Text>
             <View style={styles.boxInput}>
               <Input
+                style={styles.Inputs}
                 value={confirmPassword}
                 onChangeText={setConfirmPassword}
                 placeholder="Confirme a senha"
@@ -110,8 +106,6 @@ export function Cadastro({ navigation }) {
           </View>
         </View>
 
-        {/* Home indicator — só no desktop */}
-        {isDesktop && <View style={styles.homeIndicator} />}
       </View>
     </ScrollView>
   );

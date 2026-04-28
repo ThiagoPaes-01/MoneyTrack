@@ -139,6 +139,9 @@ export function useCadastroStyles() {
       flexDirection: "row",
       alignItems: "center",
     },
+    Inputs: {
+      color: c.white,
+    },
 
     // ─── RODAPÉ ──────────────────────────────────────────────
     jaTemConta: {
