@@ -1,5 +1,12 @@
 // screens/Bancos/Bancos.js
-import { View, Text, Image, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  useWindowDimensions,
+} from "react-native";
 import { Button } from "../../components/Button/button";
 import iconBancoDoBrasil from "../../assets/iconBancoDoBrasil.png";
 import iconBradesco from "../../assets/iconBradesco.png";
@@ -26,40 +33,61 @@ const BANCOS = [
 
 export function Bancos({ navigation }) {
   const styles = useBancosStyles();
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 768;
 
-  return (
-    <View style={styles.containerMain}>
-      {/* Header */}
+  const content = (
+    <>
+      {/* ── Header ── */}
       <View style={styles.containerHeader}>
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>🔒 Open Finance · Banco Central</Text>
+        </View>
         <Text style={styles.textConect}>Conecte o seu banco</Text>
         <Text style={styles.textDados}>
           Seus dados chegam automaticamente, sem precisar digitar nada
         </Text>
       </View>
 
-      {/* Lista de bancos */}
+      {/* ── Grid de bancos ── */}
       <ScrollView
         contentContainerStyle={styles.containerMid}
         showsVerticalScrollIndicator={false}
       >
         {BANCOS.map((banco) => (
-          <Button
-            key={banco.nome}
-            title={banco.nome}
-            style={styles.buttonBanco}
-            textStyle={styles.textBanco}
-            leftIcon={<Image source={banco.icon} style={styles.logoBanco} />}
-            onPress={() => {}}
-          />
+          <TouchableOpacity key={banco.nome} style={styles.buttonBanco}>
+            <Image source={banco.icon} style={styles.logoBanco} />
+            <Text style={styles.textBanco}>{banco.nome}</Text>
+          </TouchableOpacity>
         ))}
       </ScrollView>
 
-      {/* Botão conectar */}
-      <Button
-        title="Conectar e entrar no app"
-        style={styles.buttonConectar}
-        onPress={() => navigation.navigate("Home")}
-      />
-    </View>
+      {/* ── Botão conectar ── */}
+      <View style={styles.containerFooter}>
+        <Button
+          title="Conectar e entrar no app"
+          onPress={() => navigation.navigate("Home")}
+        />
+        <Text style={styles.pularText}>
+          Prefiro adicionar manualmente ·{" "}
+          <Text style={styles.pularLink}>Pular por agora</Text>
+        </Text>
+      </View>
+    </>
   );
+
+  // Desktop: envolve em frame de celular centralizado
+  if (isDesktop) {
+    return (
+      <View style={styles.desktopBg}>
+        <View style={styles.phoneFrame}>
+          {content}
+          <View style={styles.homeIndicator} />
+        </View>
+      </View>
+    );
+  }
+
+  // Mobile: tela normal
+  return <View style={styles.containerMain}>{content}</View>;
 }

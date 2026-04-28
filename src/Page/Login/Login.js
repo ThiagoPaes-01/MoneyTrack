@@ -1,11 +1,10 @@
-// screens/Login/Login.js
 import { useState } from "react";
-import { View, Text, Image, ScrollView } from "react-native";
+import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
 import { Button } from "../../components/Button/button";
 import { LinkText } from "../../components/Link/link";
 import { Input } from "../../components/Input/input";
-import Logo from "../../assets/Logo.png";
 import { useLoginStyles } from "./styles";
+import Logo from "../../assets/LogoMoneyTrack.png";
 
 export function Login({ navigation }) {
   const [username, setUserName] = useState("");
@@ -18,71 +17,92 @@ export function Login({ navigation }) {
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
     >
-      {/* Header */}
-      <View style={styles.header}>
-        <Image source={Logo} style={styles.logo} />
-        <Text style={styles.slogan}>
-          Controle financeiro na palma da sua mão
-        </Text>
-      </View>
+      <View style={styles.phoneFrame}>
+        <View style={styles.notch} />
 
-      {/* Container branco */}
-      <View style={styles.containerMid}>
-        {/* Bem-vindo */}
-        <View style={styles.bemVindo}>
-          <Text style={styles.bemVindoTitulo}>Bem-vindo de volta</Text>
-          <Text style={styles.bemVindoSubtitulo}>
-            Acesse sua conta para continuar
-          </Text>
+        {/* ── Header — logo + slogan ── */}
+        <View style={styles.header}>
+          <Image source={Logo} style={styles.logo} />
+          <Text style={styles.slogan}>Controle financeiro inteligente</Text>
         </View>
 
-        {/* Formulário */}
-        <View style={styles.form}>
-          <Text style={styles.label}>E-mail</Text>
-          <View style={styles.boxInput}>
-            <Input
-              onChangeText={setUserName}
-              value={username}
-              placeholder="Seu melhor e-mail"
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
+        {/* ── Formulário ── */}
+        <View style={styles.containerMid}>
+          <View style={styles.bemVindo}>
+            <Text style={styles.bemVindoTitulo}>Bem-vindo!</Text>
+            <Text style={styles.bemVindoSubtitulo}>Acesse sua conta</Text>
           </View>
 
-          <Text style={styles.label}>Senha</Text>
-          <View style={styles.boxInput}>
-            <Input
-              onChangeText={setPassword}
-              value={password}
-              placeholder="Sua senha"
-              secureTextEntry
-            />
-          </View>
+          <View style={styles.form}>
+            {/* Botões sociais */}
+            <View style={styles.outrosLogin}>
+              <TouchableOpacity style={styles.botaoSocial}>
+                <Text
+                  style={{ color: "#fff", fontSize: 14, fontWeight: "600" }}
+                >
+                  Google
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.botaoSocial}>
+                <Text
+                  style={{ color: "#fff", fontSize: 14, fontWeight: "600" }}
+                >
+                  Apple
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-          <LinkText
-            style={styles.esqueceuSenha}
-            title="Esqueceu a senha?"
-            onPress={() => console.log("Ir para recuperação de senha")}
-          />
+            {/* Divisor */}
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.continueCom}>ou com e-mail</Text>
+              <View style={styles.dividerLine} />
+            </View>
 
-          <Button title="Entrar" onPress={() => {}} />
+            {/* E-mail */}
+            <Text style={styles.label}>E-mail</Text>
+            <View style={styles.boxInput}>
+              <Input
+                onChangeText={setUserName}
+                value={username}
+                placeholder="seu@email.com"
+                keyboardType="email-address"
+                autoCapitalize="none"
+              />
+            </View>
 
-          <View style={styles.divider}>
-            <Text style={styles.continueCom}>ou continue com</Text>
-          </View>
+            {/* Senha */}
+            <Text style={styles.label}>Senha</Text>
+            <View style={styles.boxInput}>
+              <Input
+                onChangeText={setPassword}
+                value={password}
+                placeholder="*******"
+                secureTextEntry
+              />
+            </View>
 
-          <View style={styles.outrosLogin}>
-            <Button title="Google" style={styles.botaoSocial} />
-            <Button title="Apple" style={styles.botaoSocial} />
-          </View>
-
-          <Text style={styles.cadastre}>
-            Não tem conta?{" "}
+            {/* Esqueceu senha */}
             <LinkText
-              title="Cadastre-se"
-              onPress={() => navigation.navigate("Cadastro")}
+              style={styles.esqueceuSenha}
+              title="Esqueceu a senha?"
+              onPress={() => console.log("Recuperar senha")}
             />
-          </Text>
+
+            {/* Botão principal */}
+            <Button title="Entrar na conta" onPress={() => {}} />
+
+            {/* Cadastro */}
+            <Text style={styles.cadastre}>
+              Sem conta?{" "}
+              <Text
+                style={styles.cadastreLink}
+                onPress={() => navigation.navigate("Cadastro")}
+              >
+                Cadastre-se
+              </Text>
+            </Text>
+          </View>
         </View>
       </View>
     </ScrollView>

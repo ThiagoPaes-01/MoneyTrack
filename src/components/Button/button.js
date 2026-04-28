@@ -25,7 +25,7 @@ export function Button({
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: color.colors.brandBlue,
+    backgroundColor: color.colors.brandGreen,
     paddingVertical: 18,
     borderRadius: 20,
     alignItems: "center",
