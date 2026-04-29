@@ -18,7 +18,6 @@ export function Login({ navigation }) {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.phoneFrame}>
-        <View style={styles.notch} />
 
         {/* ── Header — logo + slogan ── */}
         <View style={styles.header}>

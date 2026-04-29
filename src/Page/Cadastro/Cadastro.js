@@ -94,6 +94,7 @@ export function Cadastro({ navigation }) {
             <Button
               title="Criar conta e conectar banco"
               onPress={() => navigation.navigate("Banco")}
+              style={styles.button}
             />
 
             <Text style={styles.jaTemConta}>

@@ -20,7 +20,7 @@ export function useLoginStyles() {
       alignItems: "center",
       justifyContent: isDesktop ? "center" : "center",
       backgroundColor: "#0a0d0f",
-      paddingVertical: isDesktop ? 48 : 0,
+      paddingVertical: isDesktop ? 14 : 0,
       minHeight: isDesktop ? "100vh" : undefined,
     },
 
@@ -39,50 +39,18 @@ export function useLoginStyles() {
       elevation: 24,
     },
 
-    // ─── NOTCH ───────────────────────────────────────────────
-    notch: {
-      width: 120,
-      height: 28,
-      backgroundColor: "#0a0d0f",
-      borderBottomLeftRadius: 18,
-      borderBottomRightRadius: 18,
-      alignSelf: "center",
-      display: isDesktop ? "flex" : "none",
-    },
-
-    // ─── STATUS BAR ──────────────────────────────────────────
-    statusBar: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      paddingHorizontal: 24,
-      paddingTop: isDesktop ? 8 : 48,
-      paddingBottom: 4,
-      display: isDesktop ? "flex" : "none",
-    },
-
-    statusTime: {
-      fontSize: 12,
-      fontWeight: "600",
-      color: "rgba(255,255,255,0.5)",
-    },
-
-    statusSignal: {
-      fontSize: 12,
-      color: "rgba(255,255,255,0.5)",
-    },
-
     // ─── HEADER — logo + slogan ───────────────────────────────
     header: {
       alignItems: "center",
-      paddingTop: isDesktop ? 20 : 56,
+      paddingTop: isDesktop ? 0 : 56,
       paddingBottom: 16,
       paddingHorizontal: 24,
     },
 
     // Logo sem nenhum container por volta — imagem direta
     logo: {
-      width: 280,
-      height: 220,
+      width: 160,
+      height: 140,
       resizeMode: "contain",
       marginBottom: 0,
     },
@@ -91,7 +59,7 @@ export function useLoginStyles() {
       fontSize: 13,
       color: "rgba(255,255,255,0.4)",
       textAlign: "center",
-      marginTop: -30,
+      marginTop: -20,
     },
 
     // ─── FORMULÁRIO ──────────────────────────────────────────
@@ -143,7 +111,7 @@ export function useLoginStyles() {
       flexDirection: "row",
       alignItems: "center",
       gap: 10,
-      marginBottom: 20,
+      marginBottom: 5,
     },
 
     dividerLine: {

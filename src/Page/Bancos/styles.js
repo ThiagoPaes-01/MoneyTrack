@@ -63,7 +63,7 @@ export function useBancosStyles() {
     // ─── HEADER ──────────────────────────────────────────────
     containerHeader: {
       paddingHorizontal: PADDING,
-      paddingBottom: 18,
+      paddingBottom: 38,
       paddingTop: isDesktop ? 4 : 0,
     },
 
@@ -109,6 +109,7 @@ export function useBancosStyles() {
       gap: GAP,
     },
 
+
     buttonBanco: {
       width: cardWidth,
       backgroundColor: "#1a1f2e",
@@ -140,14 +141,15 @@ export function useBancosStyles() {
     containerFooter: {
       paddingHorizontal: PADDING,
       paddingBottom: isDesktop ? 4 : 36,
-      paddingTop: 8,
-      gap: 12,
+      paddingTop: 20,
+      gap: 22,
     },
 
     pularText: {
       textAlign: "center",
       fontSize: 12,
       color: "rgba(255,255,255,0.3)",
+      paddingBottom: 23,
     },
 
     pularLink: {

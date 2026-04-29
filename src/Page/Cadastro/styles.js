@@ -20,7 +20,7 @@ export function useCadastroStyles() {
       alignItems: "center",
       justifyContent: isDesktop ? "center" : "flex-start",
       backgroundColor: "#0a0d0f",
-      paddingVertical: isDesktop ? 48 : 0,
+      paddingVertical: isDesktop ? 8 : 0,
     },
 
     // ─── PHONE FRAME ─────────────────────────────────────────
@@ -96,7 +96,7 @@ export function useCadastroStyles() {
     },
 
     bemVindo: {
-      marginBottom: 22,
+      marginBottom: 0,
     },
 
     registre: {
@@ -142,6 +142,9 @@ export function useCadastroStyles() {
     Inputs: {
       color: c.white,
     },
+    button: {
+      marginTop: 22,
+    },
 
     // ─── RODAPÉ ──────────────────────────────────────────────
     jaTemConta: {
@@ -149,17 +152,6 @@ export function useCadastroStyles() {
       marginTop: 18,
       fontSize: 13,
       color: "rgba(255,255,255,0.4)",
-    },
-
-    // ─── HOME INDICATOR ───────────────────────────────────────
-    homeIndicator: {
-      width: 100,
-      height: 5,
-      backgroundColor: "rgba(255,255,255,0.15)",
-      borderRadius: 3,
-      alignSelf: "center",
-      marginBottom: 12,
-      marginTop: 8,
     },
   });
 }
