@@ -125,7 +125,7 @@ export const styles = StyleSheet.create({
   },
 
   // ─────────────────────────────────────────
-  // STATS — 47K+ / R$2B / 4.9★
+  // STATS 
   // ─────────────────────────────────────────
 
   containerStats: {
@@ -247,7 +247,7 @@ export const styles = StyleSheet.create({
     justifyContent: responsive("center", "center", "center"),
     gap: responsive(12, 16, 20),
     maxWidth: isDesktop ? 1440 : '100%',
-    height: 700,
+    height: isDesktop ? 600 : 700,
     alignSelf: 'center',
     width: '100%',
   },
@@ -279,7 +279,7 @@ export const styles = StyleSheet.create({
     paddingBottom: responsive(70, 80, 100),
     gap: responsive(14, 20, 24),
     alignItems: "center",
-    marginLeft: 50,
+    marginLeft: isDesktop ? 50 : 10,
     flexDirection: responsive("column", "column", "row"),
     maxWidth: isDesktop ? 1440 : '100%',
     alignSelf: 'center',

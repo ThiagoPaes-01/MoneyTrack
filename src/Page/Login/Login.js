@@ -11,6 +11,24 @@ export function Login({ navigation }) {
   const [password, setPassword] = useState("");
   const styles = useLoginStyles();
 
+  const handleLogin = async () => {
+    try {
+      const resposta = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: username, password }),
+      });
+      const dados = await resposta.json();
+      if (!resposta.ok) {
+        alert(dados.erro);
+        return;
+      }
+      // dados.token = seu token de acesso, guarde com AsyncStorage
+      navigation.navigate("Home");
+    } catch (e) {
+      alert("Não foi possível conectar ao servidor");
+    }
+  };
   return (
     <ScrollView
       style={styles.scrollView}
@@ -18,7 +36,6 @@ export function Login({ navigation }) {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.phoneFrame}>
-
         {/* ── Header — logo + slogan ── */}
         <View style={styles.header}>
           <Image source={Logo} style={styles.logo} />
@@ -91,7 +108,7 @@ export function Login({ navigation }) {
             />
 
             {/* Botão principal */}
-            <Button title="Entrar na conta" onPress={() => {}} />
+            <Button title="Entrar na conta" onPress={handleLogin} />
 
             {/* Cadastro */}
             <Text style={styles.cadastre}>

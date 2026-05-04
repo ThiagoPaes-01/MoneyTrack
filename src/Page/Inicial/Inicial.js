@@ -10,7 +10,7 @@ import robot from "../../assets/Funcionalidades/robot.svg";
 import target from "../../assets/Funcionalidades/target.svg";
 import { styles } from "./styles";
 
-export function Inicial() {
+export function Inicial({ navigation }) {
   return (
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={styles.containerMain}>
@@ -39,8 +39,16 @@ export function Inicial() {
         </View>
         {/* ── Botões ── */}
         <View style={styles.containerButtons}>
-          <Button title="Começar agora — grátis" style={{ minWidth: 280 }} />
-          <Button title="Já tenho conta" style={{ minWidth: 200 }} />
+          <Button
+            title="Começar agora — grátis"
+            style={{ minWidth: 280 }}
+            onPress={() => navigation.navigate("Cadastro")}
+          />
+          <Button
+            title="Já tenho conta"
+            style={{ minWidth: 200 }}
+            onPress={() => navigation.navigate("Login")}
+          />
         </View>
 
         {/* ── Stats ── */}

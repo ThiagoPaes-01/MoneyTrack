@@ -22,6 +22,28 @@ export function Cadastro({ navigation }) {
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768;
 
+  const handleCadastro = async () => {
+    if (password !== confirmPassword) {
+      alert("As senhas não coincidem");
+      return;
+    }
+    try {
+      const resposta = await fetch("http://localhost:3000/auth/cadastro", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nome, email, password }),
+      });
+      const dados = await resposta.json();
+      if (!resposta.ok) {
+        alert(dados.erro);
+        return;
+      }
+      navigation.navigate("Banco");
+    } catch (e) {
+      alert("Não foi possível conectar ao servidor");
+    }
+  };
+
   return (
     <ScrollView
       style={styles.scrollView}
@@ -30,7 +52,6 @@ export function Cadastro({ navigation }) {
     >
       <View style={styles.phoneFrame}>
         {/* Notch e Status bar — só no desktop */}
-
 
         {/* ── Header — logo + frase ── */}
         <View style={styles.header}>
@@ -42,7 +63,9 @@ export function Cadastro({ navigation }) {
         <View style={styles.containerForm}>
           <View style={styles.bemVindo}>
             <Text style={styles.registre}>Registre-se</Text>
-            <Text style={styles.registreSubtitulo}>Crie uma conta para continuar</Text>
+            <Text style={styles.registreSubtitulo}>
+              Crie uma conta para continuar
+            </Text>
           </View>
 
           <View style={styles.form}>
@@ -93,7 +116,7 @@ export function Cadastro({ navigation }) {
 
             <Button
               title="Criar conta e conectar banco"
-              onPress={() => navigation.navigate("Banco")}
+              onPress={handleCadastro}
               style={styles.button}
             />
 
@@ -106,7 +129,6 @@ export function Cadastro({ navigation }) {
             </Text>
           </View>
         </View>
-
       </View>
     </ScrollView>
   );
