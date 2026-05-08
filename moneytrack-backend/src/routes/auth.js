@@ -2,11 +2,10 @@ const express = require('express');
 const router  = express.Router();
 const bcrypt  = require('bcryptjs');
 const jwt     = require('jsonwebtoken');
-const supabase = require('../supabase');
+const supabase = require('../../supabase');
 
 // Cadastro
 router.post('/cadastro', async (req, res) => {
-  console.log('Recebeu cadastro:', req.body);
   const { nome, email, password } = req.body;
   try {
     const { data: existe } = await supabase

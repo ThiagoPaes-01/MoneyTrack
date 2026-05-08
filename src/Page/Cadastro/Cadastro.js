@@ -38,7 +38,7 @@ export function Cadastro({ navigation }) {
         alert(dados.erro);
         return;
       }
-      navigation.navigate("Banco");
+      navigation.navigate("Bancos");
     } catch (e) {
       alert("Não foi possível conectar ao servidor");
     }
