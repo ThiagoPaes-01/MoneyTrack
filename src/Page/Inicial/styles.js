@@ -242,14 +242,12 @@ export const styles = StyleSheet.create({
     backgroundColor: "#0a0d0f",
     paddingHorizontal: responsive(16, 32, 80),
     paddingBottom: responsive(64, 80, 100),
-    flexDirection: "row",
+    flexDirection: isDesktop ? "row" : "column",
     flexWrap: "wrap",
     justifyContent: responsive("center", "center", "center"),
     gap: responsive(12, 16, 20),
     maxWidth: isDesktop ? 1440 : '100%',
     height: isDesktop ? 600 : 700,
-    alignSelf: 'center',
-    width: '100%',
   },
 
   // ─────────────────────────────────────────
