@@ -1,4 +1,5 @@
 // screens/Bancos/Bancos.js
+import { useState } from "react";
 import {
   View,
   Text,
@@ -6,7 +7,12 @@ import {
   ScrollView,
   TouchableOpacity,
   useWindowDimensions,
+  ActivityIndicator,
+  StyleSheet,
+  Alert,
+  Platform,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "../../components/Button/button";
 import iconBancoDoBrasil from "../../assets/iconBancoDoBrasil.png";
 import iconBradesco from "../../assets/iconBradesco.png";
@@ -18,6 +24,15 @@ import iconNubank from "../../assets/iconNubank.jpg";
 import iconPicPay from "../../assets/iconPicPay.png";
 import iconSantander from "../../assets/iconSantander.png";
 import { useBancosStyles } from "./styles";
+
+// Imports condicionais por plataforma — evita erros de módulo
+let WebView = null;
+let PluggyConnect = null;
+if (Platform.OS === "web") {
+  PluggyConnect = require("react-pluggy-connect").PluggyConnect;
+} else {
+  WebView = require("react-native-webview").WebView;
+}
 
 const BANCOS = [
   { nome: "Nubank", icon: iconNubank },
@@ -31,11 +46,130 @@ const BANCOS = [
   { nome: "Caixa", icon: iconCaixa },
 ];
 
+const API_URL = "http://localhost:3000";
+
+// Widget WEB: usa o SDK oficial react-pluggy-connect 
+function PluggyWidgetWeb({ connectToken, onSuccess, onClose, onError }) {
+  return (
+    <PluggyConnect
+      connectToken={connectToken}
+      onSuccess={(itemData) => onSuccess(itemData.item.id)}
+      onError={(error) => onError(error.message)}
+      onClose={onClose}
+    />
+  );
+}
+
+// Widget MOBILE: usa WebView fullscreen 
+function PluggyWidgetMobile({ connectToken, onSuccess, onClose, onError }) {
+  const handleMessage = (event) => {
+    try {
+      const msg = JSON.parse(event.nativeEvent.data);
+      if (msg.event === "SUCCESS") onSuccess(msg.data.itemId);
+      if (msg.event === "CLOSE") onClose();
+      if (msg.event === "ERROR") onError(msg.error);
+    } catch {
+      
+    }
+  };
+
+  return (
+    <View style={StyleSheet.absoluteFill}>
+      <WebView
+        source={{ uri: `https://connect.pluggy.ai/?connectToken=${connectToken}` }}
+        onMessage={handleMessage}
+        startInLoadingState
+        renderLoading={() => (
+          <ActivityIndicator style={StyleSheet.absoluteFill} size="large" />
+        )}
+        javaScriptEnabled
+        domStorageEnabled
+        thirdPartyCookiesEnabled
+      />
+    </View>
+  );
+}
+
+// ── Tela principal ─────────────────────────────────────────────────
 export function Bancos({ navigation }) {
   const styles = useBancosStyles();
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768;
 
+  const [connectToken, setConnectToken] = useState(null);
+  const [carregando, setCarregando] = useState(false);
+
+  // Pede o connectToken ao backend e abre o widget
+  const abrirWidget = async () => {
+    try {
+      setCarregando(true);
+      const res = await fetch(`${API_URL}/pluggy/connect-token`, {
+        method: "POST",
+      });
+      const dados = await res.json();
+      if (!res.ok) throw new Error(dados.erro || "Erro ao gerar token");
+      setConnectToken(dados.connectToken);
+    } catch (e) {
+      Alert.alert("Erro", e.message || "Não foi possível conectar à Pluggy");
+    } finally {
+      setCarregando(false);
+    }
+  };
+
+  // Salva contas e transações no backend após conexão bem-sucedida
+  const salvarItem = async (itemId) => {
+    const usuarioId = await AsyncStorage.getItem("usuarioId");
+    const res = await fetch(`${API_URL}/pluggy/item`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ itemId, usuarioId }),
+    });
+    if (!res.ok) {
+      const dados = await res.json();
+      throw new Error(dados.erro || "Erro ao salvar dados do banco");
+    }
+  };
+
+  const onSuccess = async (itemId) => {
+    setConnectToken(null);
+    try {
+      await salvarItem(itemId);
+      navigation.navigate("Home");
+    } catch (e) {
+      Alert.alert("Erro", e.message);
+    }
+  };
+
+  const onClose = () => setConnectToken(null);
+
+  const onError = (msg) => {
+    setConnectToken(null);
+    Alert.alert("Erro na conexão", msg || "Tente novamente");
+  };
+
+  // Renderiza o widget correto conforme plataforma
+  if (connectToken) {
+    if (Platform.OS === "web") {
+      return (
+        <PluggyWidgetWeb
+          connectToken={connectToken}
+          onSuccess={onSuccess}
+          onClose={onClose}
+          onError={onError}
+        />
+      );
+    }
+    return (
+      <PluggyWidgetMobile
+        connectToken={connectToken}
+        onSuccess={onSuccess}
+        onClose={onClose}
+        onError={onError}
+      />
+    );
+  }
+
+  // ── Conteúdo principal da tela ─────────────────────────────────
   const content = (
     <>
       {/* ── Header ── */}
@@ -65,28 +199,30 @@ export function Bancos({ navigation }) {
       {/* ── Botão conectar ── */}
       <View style={styles.containerFooter}>
         <Button
-          title="Conectar e entrar no app"
-          onPress={() => navigation.navigate("Home")}
+          title={carregando ? "Conectando..." : "Conectar e entrar no app"}
+          onPress={abrirWidget}
+          disabled={carregando}
         />
         <Text style={styles.pularText}>
           Prefiro adicionar manualmente ·{" "}
-          <Text style={styles.pularLink}>Pular por agora</Text>
+          <Text
+            style={styles.pularLink}
+            onPress={() => navigation.navigate("Home")}
+          >
+            Pular por agora
+          </Text>
         </Text>
       </View>
     </>
   );
 
-  // Desktop: envolve em frame de celular centralizado
   if (isDesktop) {
     return (
       <View style={styles.desktopBg}>
-        <View style={styles.phoneFrame}>
-          {content}
-        </View>
+        <View style={styles.phoneFrame}>{content}</View>
       </View>
     );
   }
 
-  // Mobile: tela normal
   return <View style={styles.containerMain}>{content}</View>;
 }

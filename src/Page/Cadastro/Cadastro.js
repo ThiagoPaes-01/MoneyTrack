@@ -1,4 +1,3 @@
-// screens/Cadastro/Cadastro.js
 import { useState } from "react";
 import {
   View,
@@ -7,6 +6,7 @@ import {
   ScrollView,
   useWindowDimensions,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "../../components/Button/button";
 import { LinkText } from "../../components/Link/link";
 import { Input } from "../../components/Input/input";
@@ -38,6 +38,9 @@ export function Cadastro({ navigation }) {
         alert(dados.erro);
         return;
       }
+      // Salva o token e o id do usuário para uso posterior (ex: Pluggy)
+      await AsyncStorage.setItem("token", dados.token);
+      await AsyncStorage.setItem("usuarioId", dados.usuario.id);
       navigation.navigate("Bancos");
     } catch (e) {
       alert("Não foi possível conectar ao servidor");
@@ -51,8 +54,6 @@ export function Cadastro({ navigation }) {
       showsVerticalScrollIndicator={false}
     >
       <View style={styles.phoneFrame}>
-        {/* Notch e Status bar — só no desktop */}
-
         {/* ── Header — logo + frase ── */}
         <View style={styles.header}>
           <Image source={Logo} style={styles.logo} />
