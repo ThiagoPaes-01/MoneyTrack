@@ -25,7 +25,7 @@ import iconPicPay from "../../assets/iconPicPay.png";
 import iconSantander from "../../assets/iconSantander.png";
 import { useBancosStyles } from "./styles";
 
-// Imports condicionais por plataforma — evita erros de módulo
+// Imports condicionais por plataforma
 let WebView = null;
 let PluggyConnect = null;
 if (Platform.OS === "web") {
@@ -48,11 +48,12 @@ const BANCOS = [
 
 const API_URL = "http://localhost:3000";
 
-// Widget WEB: usa o SDK oficial react-pluggy-connect 
+// Widget WEB
 function PluggyWidgetWeb({ connectToken, onSuccess, onClose, onError }) {
   return (
     <PluggyConnect
       connectToken={connectToken}
+      includeSandbox={true}
       onSuccess={(itemData) => onSuccess(itemData.item.id)}
       onError={(error) => onError(error.message)}
       onClose={onClose}
@@ -60,31 +61,38 @@ function PluggyWidgetWeb({ connectToken, onSuccess, onClose, onError }) {
   );
 }
 
-// Widget MOBILE: usa WebView fullscreen 
+// Widget MOBILE
 function PluggyWidgetMobile({ connectToken, onSuccess, onClose, onError }) {
   const handleMessage = (event) => {
     try {
       const msg = JSON.parse(event.nativeEvent.data);
-      if (msg.event === "SUCCESS") onSuccess(msg.data.itemId);
+      console.log("Mensagem Pluggy:", msg); // Debug
+
+      if (msg.event === "SUCCESS") onSuccess(msg.data?.itemId || msg.data);
       if (msg.event === "CLOSE") onClose();
-      if (msg.event === "ERROR") onError(msg.error);
-    } catch {
-      
+      if (msg.event === "ERROR") onError(msg.error || msg.message);
+    } catch (e) {
+      console.error("Erro ao parsear mensagem:", e);
     }
   };
 
   return (
     <View style={StyleSheet.absoluteFill}>
       <WebView
-        source={{ uri: `https://connect.pluggy.ai/?connectToken=${connectToken}` }}
+        source={{ 
+          uri: `https://connect.pluggy.ai/?connectToken=${connectToken}&includeSandbox=true` 
+        }}
         onMessage={handleMessage}
         startInLoadingState
         renderLoading={() => (
-          <ActivityIndicator style={StyleSheet.absoluteFill} size="large" />
+          <ActivityIndicator style={StyleSheet.absoluteFill} size="large" color="#000" />
         )}
         javaScriptEnabled
         domStorageEnabled
         thirdPartyCookiesEnabled
+        onError={(syntheticEvent) => {
+          console.error("WebView Error:", syntheticEvent.nativeEvent);
+        }}
       />
     </View>
   );
@@ -99,7 +107,7 @@ export function Bancos({ navigation }) {
   const [connectToken, setConnectToken] = useState(null);
   const [carregando, setCarregando] = useState(false);
 
-  // Pede o connectToken ao backend e abre o widget
+  // Pede o connectToken ao backend
   const abrirWidget = async () => {
     try {
       setCarregando(true);
@@ -116,27 +124,53 @@ export function Bancos({ navigation }) {
     }
   };
 
-  // Salva contas e transações no backend após conexão bem-sucedida
+  // Salva os dados no backend
   const salvarItem = async (itemId) => {
     const usuarioId = await AsyncStorage.getItem("usuarioId");
+    if (!usuarioId) throw new Error("Usuário não encontrado");
+
     const res = await fetch(`${API_URL}/pluggy/item`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ itemId, usuarioId }),
     });
+
     if (!res.ok) {
-      const dados = await res.json();
+      const dados = await res.json().catch(() => ({}));
       throw new Error(dados.erro || "Erro ao salvar dados do banco");
     }
   };
 
+  // ✅ Quando a conexão é bem-sucedida → vai direto para o Menu (Home)
   const onSuccess = async (itemId) => {
     setConnectToken(null);
+
     try {
       await salvarItem(itemId);
-      navigation.navigate("Home");
+
+      Alert.alert(
+        "✅ Conexão realizada com sucesso!",
+        "Seus dados bancários foram importados automaticamente.",
+        [
+          {
+            text: "Ir para o Menu",
+            onPress: () => navigation.navigate("Menu"),
+          },
+        ],
+        { cancelable: false }
+      );
     } catch (e) {
-      Alert.alert("Erro", e.message);
+      console.error("Erro ao salvar item:", e);
+      Alert.alert(
+        "Conexão realizada",
+        "O banco foi conectado, mas houve um erro ao salvar os dados.\n\nVocê pode tentar novamente mais tarde.",
+        [
+          {
+            text: "Ir para o Menu",
+            onPress: () => navigation.navigate("Menu"),
+          },
+        ]
+      );
     }
   };
 
@@ -147,7 +181,7 @@ export function Bancos({ navigation }) {
     Alert.alert("Erro na conexão", msg || "Tente novamente");
   };
 
-  // Renderiza o widget correto conforme plataforma
+  // Renderiza o widget se estiver ativo
   if (connectToken) {
     if (Platform.OS === "web") {
       return (
@@ -169,13 +203,13 @@ export function Bancos({ navigation }) {
     );
   }
 
-  // ── Conteúdo principal da tela ─────────────────────────────────
+  // ── Tela de seleção de bancos ─────────────────────────────────
   const content = (
     <>
-      {/* ── Header ── */}
+      {/* Header */}
       <View style={styles.containerHeader}>
         <View style={styles.badge}>
-          <Text style={styles.badgeText}>🔒 Open Finance · Banco Central</Text>
+          <Text style={styles.badgeText}>Open Finance · Banco Central</Text>
         </View>
         <Text style={styles.textConect}>Conecte o seu banco</Text>
         <Text style={styles.textDados}>
@@ -183,7 +217,7 @@ export function Bancos({ navigation }) {
         </Text>
       </View>
 
-      {/* ── Grid de bancos ── */}
+      {/* Grid de bancos */}
       <ScrollView
         contentContainerStyle={styles.containerMid}
         showsVerticalScrollIndicator={false}
@@ -196,7 +230,7 @@ export function Bancos({ navigation }) {
         ))}
       </ScrollView>
 
-      {/* ── Botão conectar ── */}
+      {/* Footer */}
       <View style={styles.containerFooter}>
         <Button
           title={carregando ? "Conectando..." : "Conectar e entrar no app"}
@@ -207,7 +241,7 @@ export function Bancos({ navigation }) {
           Prefiro adicionar manualmente ·{" "}
           <Text
             style={styles.pularLink}
-            onPress={() => navigation.navigate("Home")}
+            onPress={() => navigation.navigate("Menu")}
           >
             Pular por agora
           </Text>

@@ -5,6 +5,7 @@ import { LinkText } from "../../components/Link/link";
 import { Input } from "../../components/Input/input";
 import { useLoginStyles } from "./styles";
 import Logo from "../../assets/LogoMoneyTrack.png";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function Login({ navigation }) {
   const [username, setUserName] = useState("");
@@ -23,12 +24,16 @@ export function Login({ navigation }) {
         alert(dados.erro);
         return;
       }
-      // dados.token = seu token de acesso, guarde com AsyncStorage
-      navigation.navigate("Home");
+
+      await AsyncStorage.setItem("usuarioId", dados.usuario.id);
+      await AsyncStorage.setItem("token", dados.token);
+
+      navigation.navigate("Menu");
     } catch (e) {
       alert("Não foi possível conectar ao servidor");
     }
   };
+
   return (
     <ScrollView
       style={styles.scrollView}
