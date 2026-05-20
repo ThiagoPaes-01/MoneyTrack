@@ -4,6 +4,17 @@ import { color } from "../../Global/color";
 const c = color.colors;
 const { width } = Dimensions.get("window");
 
+const BREAKPOINTS = {
+  mobile: 0,
+  tablet: 768,
+  desktop: 1024,
+  wide: 1440,
+};
+
+// Helper para determinar dispositivo
+const isMobile = width < BREAKPOINTS.tablet;
+const isTablet = width >= BREAKPOINTS.tablet && width < BREAKPOINTS.desktop;
+const isDesktop = width >= BREAKPOINTS.desktop;
 
 export const styles = StyleSheet.create({
   card: {
@@ -11,10 +22,11 @@ export const styles = StyleSheet.create({
     borderRadius: 18,
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
+    alignItems: "center",
     padding: 15,
-    height: "18%",
-    width: "100%",
-    flexWrap: "wrap",
+    height: "20%",
+    width: isDesktop ? "48%" : "88%", 
+    flexWrap: isDesktop ? "wrap" : "nowrap",
   },
 
   iconWrapper: {
@@ -22,7 +34,6 @@ export const styles = StyleSheet.create({
     height: 66,
     borderRadius: 16,
     backgroundColor: "rgba(58,201,126,0.12)",
-    marginTop: 5,
     marginRight: 15,
     alignItems: "center",
     justifyContent: "center",
