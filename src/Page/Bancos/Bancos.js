@@ -1,4 +1,3 @@
-// screens/Bancos/Bancos.js
 import { useState } from "react";
 import {
   View,
@@ -98,7 +97,7 @@ function PluggyWidgetMobile({ connectToken, onSuccess, onClose, onError }) {
   );
 }
 
-// ── Tela principal ─────────────────────────────────────────────────
+// Tela principal 
 export function Bancos({ navigation }) {
   const styles = useBancosStyles();
   const { width } = useWindowDimensions();
@@ -141,7 +140,7 @@ export function Bancos({ navigation }) {
     }
   };
 
-  // ✅ Quando a conexão é bem-sucedida → vai direto para o Menu (Home)
+  // Quando a conexão é bem-sucedida → vai direto para o Menu (Home)
   const onSuccess = async (itemId) => {
     setConnectToken(null);
 
@@ -149,7 +148,7 @@ export function Bancos({ navigation }) {
       await salvarItem(itemId);
 
       Alert.alert(
-        "✅ Conexão realizada com sucesso!",
+        "Conexão realizada com sucesso!",
         "Seus dados bancários foram importados automaticamente.",
         [
           {
@@ -203,7 +202,7 @@ export function Bancos({ navigation }) {
     );
   }
 
-  // ── Tela de seleção de bancos ─────────────────────────────────
+  // Tela de seleção de bancos 
   const content = (
     <>
       {/* Header */}

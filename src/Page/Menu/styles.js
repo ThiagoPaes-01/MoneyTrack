@@ -20,7 +20,6 @@ export function useMenuStyles() {
       backgroundColor: "#0a0d0f",
     },
 
-    // ─── Sidebar ─────────────────────────────
     sidebar: {
       width: 240,
       backgroundColor: "#111318",
@@ -51,7 +50,6 @@ export function useMenuStyles() {
       color: c.warning,
     },
 
-    // ─── Saudação ────────────────────────────
     sidebarGreeting: {
       flexDirection: "row",
       alignItems: "center",
@@ -93,7 +91,6 @@ export function useMenuStyles() {
       marginTop: 1,
     },
 
-    // ─── Saldo (desktop sidebar) ─────────────
     saldoCard: {
       marginHorizontal: 12,
       marginBottom: 16,
@@ -120,11 +117,11 @@ export function useMenuStyles() {
       color: c.success,
     },
 
-    // ─── Nav items ───────────────────────────
     sidebarNav: {
       paddingHorizontal: 12,
       gap: 2,
       marginBottom: 16,
+      flex: 1,
     },
 
     navItem: {
@@ -155,20 +152,6 @@ export function useMenuStyles() {
       fontWeight: "700",
     },
 
-    navBadge: {
-      backgroundColor: c.success,
-      borderRadius: 10,
-      paddingHorizontal: 7,
-      paddingVertical: 2,
-    },
-
-    navBadgeText: {
-      fontSize: 10,
-      fontWeight: "800",
-      color: "#000000",
-    },
-
-    // ─── Transações (desktop sidebar) ────────
     transacoesContainer: {
       flex: 1,
       paddingHorizontal: 12,
@@ -240,7 +223,6 @@ export function useMenuStyles() {
       color: c.success,
     },
 
-    // ─── Sair ────────────────────────────────
     sidebarSignOut: {
       flexDirection: "row",
       alignItems: "center",
@@ -258,7 +240,6 @@ export function useMenuStyles() {
       color: "rgba(232,85,85,0.7)",
     },
 
-    // ─── Conteúdo principal ──────────────────
     desktopContent: {
       flex: 1,
       backgroundColor: "#0a0d0f",
@@ -277,7 +258,6 @@ export function useMenuStyles() {
       flex: 1,
     },
 
-    // ─── Bottom nav ──────────────────────────
     bottomNav: {
       flexDirection: "row",
       backgroundColor: "#111318",
@@ -306,12 +286,11 @@ export function useMenuStyles() {
     },
 
     // ════════════════════════════════════════
-    // DASHBOARD CONTENT
+    // DASHBOARD
     // ════════════════════════════════════════
 
-    // ─── Saudação ────────────────────────────
     dashboardGreeting: {
-      marginBottom: 28,
+      marginBottom: 24,
     },
 
     dashboardGreetingSubtitle: {
@@ -326,11 +305,10 @@ export function useMenuStyles() {
       marginTop: 2,
     },
 
-    // ─── Cards row ───────────────────────────
     cardsRow: {
       flexDirection: "row",
       gap: 14,
-      marginBottom: 24,
+      marginBottom: 14,
     },
 
     // ─── Card Saldo ──────────────────────────
@@ -387,6 +365,52 @@ export function useMenuStyles() {
       color: "rgba(255,255,255,0.25)",
       fontSize: 11,
       marginTop: 12,
+    },
+
+    // ─── Card Receitas ────────────────────────
+    cardReceitas: {
+      flex: 1,
+      backgroundColor: "#1a2235",
+      borderRadius: 16,
+      padding: 20,
+      borderWidth: 1,
+      borderColor: "rgba(58,201,126,0.15)",
+    },
+
+    cardReceitasLabel: {
+      color: "rgba(255,255,255,0.4)",
+      fontSize: 12,
+      fontWeight: "600",
+      marginBottom: 8,
+    },
+
+    cardReceitasValor: {
+      color: "#3ac97e",
+      fontSize: 20,
+      fontWeight: "800",
+    },
+
+    // ─── Card Despesas ────────────────────────
+    cardDespesas: {
+      flex: 1,
+      backgroundColor: "#1a2235",
+      borderRadius: 16,
+      padding: 20,
+      borderWidth: 1,
+      borderColor: "rgba(232,85,85,0.15)",
+    },
+
+    cardDespesasLabel: {
+      color: "rgba(255,255,255,0.4)",
+      fontSize: 12,
+      fontWeight: "600",
+      marginBottom: 8,
+    },
+
+    cardDespesasValor: {
+      color: "#e85555",
+      fontSize: 20,
+      fontWeight: "800",
     },
 
     // ─── Lista de transações ─────────────────
@@ -480,7 +504,7 @@ export function useMenuStyles() {
       color: "#3ac97e",
     },
 
-    // ─── Modal salário ───────────────────────
+    // ─── Modal ───────────────────────────────
     modalOverlay: {
       flex: 1,
       backgroundColor: "rgba(0,0,0,0.6)",

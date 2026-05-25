@@ -1,7 +1,8 @@
 // src/Page/Menu/Menu.js
 import {
   View, Text, TouchableOpacity, useWindowDimensions,
-  ActivityIndicator, ScrollView, Modal, TextInput, KeyboardAvoidingView, Platform,
+  ActivityIndicator, ScrollView, Modal, TextInput,
+  KeyboardAvoidingView, Platform,
 } from "react-native";
 import { useState } from "react";
 import { useMenuStyles } from "./styles";
@@ -26,6 +27,12 @@ function formatarValor(valor) {
   return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+function formatarValorCurto(valor) {
+  if (!valor || valor === 0) return "R$0";
+  if (valor >= 1000) return `R$${(valor / 1000).toFixed(1)}k`;
+  return `R$${Math.round(valor)}`;
+}
+
 function formatarData(data) {
   if (!data) return "";
   return new Date(data).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
@@ -36,6 +43,127 @@ function primeiroNome(nome) {
   return nome.split(" ")[0];
 }
 
+// ── Gráfico de Colunas Customizado ───────────────────────────────
+function GraficoColunas({ dados }) {
+  if (!dados || dados.length === 0) {
+    return (
+      <View style={{ alignItems: "center", paddingVertical: 32 }}>
+        <Text style={{ color: "rgba(255,255,255,0.3)", fontSize: 13 }}>
+          Sem dados suficientes para o gráfico
+        </Text>
+      </View>
+    );
+  }
+
+  const todosValores = dados.flatMap(d => [d.receitas || 0, d.despesas || 0]);
+  const maxValor = Math.max(...todosValores, 1);
+  const alturaMaxima = 140;
+
+  return (
+    <View>
+      {/* Área do gráfico */}
+      <View style={{ flexDirection: "row", alignItems: "flex-end", height: alturaMaxima + 40, gap: 4 }}>
+        {dados.map((d, i) => {
+          const alturaReceita = maxValor > 0 ? (d.receitas / maxValor) * alturaMaxima : 0;
+          const alturaDespesa = maxValor > 0 ? (d.despesas / maxValor) * alturaMaxima : 0;
+
+          return (
+            <View key={i} style={{ flex: 1, alignItems: "center", justifyContent: "flex-end" }}>
+              {/* Barras */}
+              <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 2, marginBottom: 6 }}>
+                {/* Receita */}
+                <View style={{ width: 10 }}>
+                  {alturaReceita > 0 ? (
+                    <View style={{
+                      height: Math.max(alturaReceita, 3),
+                      backgroundColor: "#3ac97e",
+                      borderRadius: 3,
+                    }} />
+                  ) : (
+                    <View style={{ height: 3, backgroundColor: "rgba(58,201,126,0.2)", borderRadius: 3 }} />
+                  )}
+                </View>
+                {/* Despesa */}
+                <View style={{ width: 10 }}>
+                  {alturaDespesa > 0 ? (
+                    <View style={{
+                      height: Math.max(alturaDespesa, 3),
+                      backgroundColor: "#e85555",
+                      borderRadius: 3,
+                    }} />
+                  ) : (
+                    <View style={{ height: 3, backgroundColor: "rgba(232,85,85,0.2)", borderRadius: 3 }} />
+                  )}
+                </View>
+              </View>
+              {/* Label do mês */}
+              <Text style={{ color: "rgba(255,255,255,0.35)", fontSize: 10, textAlign: "center" }}>
+                {d.mes}
+              </Text>
+            </View>
+          );
+        })}
+      </View>
+
+      {/* Legenda */}
+      <View style={{ flexDirection: "row", gap: 16, marginTop: 12 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+          <View style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: "#3ac97e" }} />
+          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>Receitas</Text>
+        </View>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+          <View style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: "#e85555" }} />
+          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>Despesas</Text>
+        </View>
+      </View>
+    </View>
+  );
+}
+
+// ── Gastos por Categoria 
+function GraficoCategoria({ gastos }) {
+  if (!gastos || gastos.length === 0) {
+    return (
+      <View style={{ alignItems: "center", paddingVertical: 32 }}>
+        <Text style={{ color: "rgba(255,255,255,0.3)", fontSize: 13, textAlign: "center" }}>
+          Nenhuma despesa categorizada{"\n"}este mês
+        </Text>
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ gap: 12 }}>
+      {gastos.map((g, i) => (
+        <View key={i} style={{ gap: 6 }}>
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <Text style={{ color: "rgba(255,255,255,0.7)", fontSize: 13 }} numberOfLines={1}>
+              {g.nome}
+            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <Text style={{ color: "rgba(255,255,255,0.35)", fontSize: 11 }}>
+                {formatarValor(g.valor)}
+              </Text>
+              <Text style={{ color: g.cor, fontSize: 13, fontWeight: "700", minWidth: 36, textAlign: "right" }}>
+                {g.percentual}%
+              </Text>
+            </View>
+          </View>
+          <View style={{ height: 6, backgroundColor: "rgba(255,255,255,0.08)", borderRadius: 3 }}>
+            <View style={{
+              height: 6,
+              width: `${g.percentual}%`,
+              backgroundColor: g.cor,
+              borderRadius: 3,
+            }} />
+          </View>
+        </View>
+      ))}
+    </View>
+  );
+}
+
+// ── Modal Receita
 function SalarioModal({ visivel, onFechar, onSalvar, styles }) {
   const [valor, setValor] = useState("");
 
@@ -57,7 +185,7 @@ function SalarioModal({ visivel, onFechar, onSalvar, styles }) {
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Definir salário</Text>
+              <Text style={styles.modalTitle}>Definir Salário:</Text>
               <TouchableOpacity onPress={onFechar}>
                 <Text style={{ color: "rgba(255,255,255,0.5)", fontSize: 18 }}>✕</Text>
               </TouchableOpacity>
@@ -84,8 +212,15 @@ function SalarioModal({ visivel, onFechar, onSalvar, styles }) {
   );
 }
 
-function DashboardContent({ styles, saldoTotal, salario, salvarSalario, transacoes, carregando, nomeUsuario }) {
+// ── Dashboard Content ─────────────────────────────────────────────
+function DashboardContent({
+  styles, saldoTotal, salario, salvarSalario,
+  transacoes, carregando, nomeUsuario,
+  dadosGrafico, gastosPorCategoria, totalDespesas,
+}) {
   const [modalVisivel, setModalVisivel] = useState(false);
+  const { width } = useWindowDimensions();
+  const isDesktop = width >= 768;
 
   return (
     <ScrollView
@@ -101,9 +236,8 @@ function DashboardContent({ styles, saldoTotal, salario, salvarSalario, transaco
         </Text>
       </View>
 
-      {/* Cards: Saldo + Salário */}
+      {/* Cards: Saldo + Salário + Despesas */}
       <View style={styles.cardsRow}>
-
         <View style={styles.cardSaldo}>
           <Text style={styles.cardSaldoLabel}>SALDO TOTAL</Text>
           {carregando ? (
@@ -115,7 +249,7 @@ function DashboardContent({ styles, saldoTotal, salario, salvarSalario, transaco
 
         <TouchableOpacity onPress={() => setModalVisivel(true)} style={styles.cardSalario}>
           <View style={styles.cardSalarioHeader}>
-            <Text style={styles.cardSalarioLabel}>SALÁRIO</Text>
+            <Text style={styles.cardSalarioLabel}>Receita: </Text>
             <Text style={{ color: "rgba(58,201,126,0.6)", fontSize: 12 }}>✎</Text>
           </View>
           <Text style={styles.cardSalarioValor}>
@@ -124,6 +258,53 @@ function DashboardContent({ styles, saldoTotal, salario, salvarSalario, transaco
           <Text style={styles.cardSalarioHint}>Toque para editar</Text>
         </TouchableOpacity>
 
+        <View style={styles.cardDespesas}>
+          <Text style={styles.cardDespesasLabel}>DESPESAS (MÊS)</Text>
+          {carregando ? (
+            <ActivityIndicator size="small" color="#e85555" />
+          ) : (
+            <Text style={styles.cardDespesasValor}>{formatarValor(totalDespesas)}</Text>
+          )}
+        </View>
+      </View>
+
+      {/* Gráficos */}
+      <View style={[
+        { marginBottom: 24 },
+        isDesktop && { flexDirection: "row", gap: 16 },
+      ]}>
+        {/* Gráfico de Colunas */}
+        <View style={[
+          styles.transacoesCard,
+          { padding: 18 },
+          isDesktop && { flex: 2 },
+          !isDesktop && { marginBottom: 16 },
+        ]}>
+          <Text style={[styles.transacoesCardTitle, { marginBottom: 16 }]}>
+            Receitas vs Despesas
+          </Text>
+          {carregando ? (
+            <ActivityIndicator size="small" color="#3ac97e" />
+          ) : (
+            <GraficoColunas dados={dadosGrafico} />
+          )}
+        </View>
+
+        {/* Gastos por Categoria */}
+        <View style={[
+          styles.transacoesCard,
+          { padding: 18 },
+          isDesktop && { flex: 1, minWidth: 240 },
+        ]}>
+          <Text style={[styles.transacoesCardTitle, { marginBottom: 16 }]}>
+            Gastos por categoria
+          </Text>
+          {carregando ? (
+            <ActivityIndicator size="small" color="#3ac97e" />
+          ) : (
+            <GraficoCategoria gastos={gastosPorCategoria} />
+          )}
+        </View>
       </View>
 
       {/* Últimas Transações */}
@@ -154,7 +335,6 @@ function DashboardContent({ styles, saldoTotal, salario, salvarSalario, transaco
                   {t.tipo === "DEBIT" ? "↓" : "↑"}
                 </Text>
               </View>
-
               <View style={styles.transacoesCardInfo}>
                 <Text style={styles.transacoesCardDescricao} numberOfLines={1}>
                   {t.descricao || t.categoria || "—"}
@@ -163,7 +343,6 @@ function DashboardContent({ styles, saldoTotal, salario, salvarSalario, transaco
                   {t.categoria || ""}{t.categoria && t.data ? "  ·  " : ""}{formatarData(t.data)}
                 </Text>
               </View>
-
               <Text style={t.tipo === "DEBIT" ? styles.transacoesCardValorDebito : styles.transacoesCardValorCredito}>
                 {t.tipo === "DEBIT" ? "-" : "+"}{formatarValor(Math.abs(t.valor))}
               </Text>
@@ -182,19 +361,25 @@ function DashboardContent({ styles, saldoTotal, salario, salvarSalario, transaco
   );
 }
 
+// ── Menu principal ────────────────────────────────────────────────
 export function Menu({ navigation, activeRoute = "Dashboard", children }) {
   const styles = useMenuStyles();
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768;
-  const { saldoTotal, salario, salvarSalario, transacoes, carregando, nomeUsuario } = useFinancas();
+  const {
+    saldoTotal, salario, salvarSalario, transacoes, carregando, nomeUsuario,
+    dadosGrafico, gastosPorCategoria, totalDespesas,
+  } = useFinancas();
 
-  const dashboardProps = { styles, saldoTotal, salario, salvarSalario, transacoes, carregando, nomeUsuario };
+  const dashboardProps = {
+    styles, saldoTotal, salario, salvarSalario, transacoes, carregando, nomeUsuario,
+    dadosGrafico, gastosPorCategoria, totalDespesas,
+  };
 
   if (isDesktop) {
     return (
       <View style={styles.desktopRoot}>
         <View style={styles.sidebar}>
-
           <View style={styles.sidebarLogo}>
             <Text style={styles.logoText}>
               Money<Text style={styles.logoTrack}>Track</Text>
@@ -236,7 +421,6 @@ export function Menu({ navigation, activeRoute = "Dashboard", children }) {
           >
             <Text style={styles.signOutText}>Sair</Text>
           </TouchableOpacity>
-
         </View>
 
         <View style={styles.desktopContent}>
