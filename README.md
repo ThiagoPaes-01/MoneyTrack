@@ -11,7 +11,6 @@ O objetivo do MoneyTrack é ajudar usuários a organizarem suas finanças, acomp
 - Cadastro e login de usuários
 - Integração bancária com Pluggy (Open Finance)
 - Visualização de contas bancárias
-- Sincronização automática de transações
 - Dashboard financeiro
 - Histórico de movimentações
 - Controle de receitas e despesas

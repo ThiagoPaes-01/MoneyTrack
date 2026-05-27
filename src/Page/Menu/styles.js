@@ -215,13 +215,8 @@ export function useMenuStyles() {
       fontWeight: "700",
     },
 
-    valorDebito: {
-      color: "#e85555",
-    },
-
-    valorCredito: {
-      color: c.success,
-    },
+    valorDebito: { color: "#e85555" },
+    valorCredito: { color: c.success },
 
     sidebarSignOut: {
       flexDirection: "row",
@@ -254,9 +249,7 @@ export function useMenuStyles() {
       backgroundColor: "#0a0d0f",
     },
 
-    mobileContent: {
-      flex: 1,
-    },
+    mobileContent: { flex: 1 },
 
     bottomNav: {
       flexDirection: "row",
@@ -289,21 +282,9 @@ export function useMenuStyles() {
     // DASHBOARD
     // ════════════════════════════════════════
 
-    dashboardGreeting: {
-      marginBottom: 24,
-    },
-
-    dashboardGreetingSubtitle: {
-      color: "rgba(255,255,255,0.4)",
-      fontSize: 14,
-    },
-
-    dashboardGreetingTitle: {
-      color: "#fff",
-      fontSize: 26,
-      fontWeight: "800",
-      marginTop: 2,
-    },
+    dashboardGreeting: { marginBottom: 24 },
+    dashboardGreetingSubtitle: { color: "rgba(255,255,255,0.4)", fontSize: 14 },
+    dashboardGreetingTitle: { color: "#fff", fontSize: 26, fontWeight: "800", marginTop: 2 },
 
     cardsRow: {
       flexDirection: "row",
@@ -311,28 +292,15 @@ export function useMenuStyles() {
       marginBottom: 14,
     },
 
-    // ─── Card Saldo ──────────────────────────
     cardSaldo: {
       flex: 1,
       backgroundColor: "#3ac97e",
       borderRadius: 16,
       padding: 20,
     },
+    cardSaldoLabel: { color: "rgba(0,0,0,0.55)", fontSize: 12, fontWeight: "600", marginBottom: 8 },
+    cardSaldoValor: { color: "#0d1321", fontSize: 22, fontWeight: "800" },
 
-    cardSaldoLabel: {
-      color: "rgba(0,0,0,0.55)",
-      fontSize: 12,
-      fontWeight: "600",
-      marginBottom: 8,
-    },
-
-    cardSaldoValor: {
-      color: "#0d1321",
-      fontSize: 22,
-      fontWeight: "800",
-    },
-
-    // ─── Card Salário ─────────────────────────
     cardSalario: {
       flex: 1,
       backgroundColor: "#1a2235",
@@ -341,33 +309,11 @@ export function useMenuStyles() {
       borderWidth: 1,
       borderColor: "rgba(58,201,126,0.15)",
     },
+    cardSalarioHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
+    cardSalarioLabel: { color: "rgba(255,255,255,0.4)", fontSize: 12, fontWeight: "600" },
+    cardSalarioValor: { color: "#fff", fontSize: 22, fontWeight: "800", marginTop: 8 },
+    cardSalarioHint: { color: "rgba(255,255,255,0.25)", fontSize: 11, marginTop: 12 },
 
-    cardSalarioHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "flex-start",
-    },
-
-    cardSalarioLabel: {
-      color: "rgba(255,255,255,0.4)",
-      fontSize: 12,
-      fontWeight: "600",
-    },
-
-    cardSalarioValor: {
-      color: "#fff",
-      fontSize: 22,
-      fontWeight: "800",
-      marginTop: 8,
-    },
-
-    cardSalarioHint: {
-      color: "rgba(255,255,255,0.25)",
-      fontSize: 11,
-      marginTop: 12,
-    },
-
-    // ─── Card Receitas ────────────────────────
     cardReceitas: {
       flex: 1,
       backgroundColor: "#1a2235",
@@ -376,21 +322,9 @@ export function useMenuStyles() {
       borderWidth: 1,
       borderColor: "rgba(58,201,126,0.15)",
     },
+    cardReceitasLabel: { color: "rgba(255,255,255,0.4)", fontSize: 12, fontWeight: "600", marginBottom: 8 },
+    cardReceitasValor: { color: "#3ac97e", fontSize: 20, fontWeight: "800" },
 
-    cardReceitasLabel: {
-      color: "rgba(255,255,255,0.4)",
-      fontSize: 12,
-      fontWeight: "600",
-      marginBottom: 8,
-    },
-
-    cardReceitasValor: {
-      color: "#3ac97e",
-      fontSize: 20,
-      fontWeight: "800",
-    },
-
-    // ─── Card Despesas ────────────────────────
     cardDespesas: {
       flex: 1,
       backgroundColor: "#1a2235",
@@ -399,21 +333,9 @@ export function useMenuStyles() {
       borderWidth: 1,
       borderColor: "rgba(232,85,85,0.15)",
     },
+    cardDespesasLabel: { color: "rgba(255,255,255,0.4)", fontSize: 12, fontWeight: "600", marginBottom: 8 },
+    cardDespesasValor: { color: "#e85555", fontSize: 20, fontWeight: "800" },
 
-    cardDespesasLabel: {
-      color: "rgba(255,255,255,0.4)",
-      fontSize: 12,
-      fontWeight: "600",
-      marginBottom: 8,
-    },
-
-    cardDespesasValor: {
-      color: "#e85555",
-      fontSize: 20,
-      fontWeight: "800",
-    },
-
-    // ─── Lista de transações ─────────────────
     transacoesCard: {
       backgroundColor: "#1a2235",
       borderRadius: 16,
@@ -421,161 +343,246 @@ export function useMenuStyles() {
       borderColor: "rgba(255,255,255,0.06)",
       overflow: "hidden",
     },
-
     transacoesCardHeader: {
       padding: 18,
       borderBottomWidth: 1,
       borderBottomColor: "rgba(255,255,255,0.05)",
     },
-
-    transacoesCardTitle: {
-      color: "#fff",
-      fontSize: 16,
-      fontWeight: "700",
-    },
-
-    transacoesCardVazio: {
-      padding: 32,
-      alignItems: "center",
-    },
-
-    transacoesCardVazioText: {
-      color: "rgba(255,255,255,0.3)",
-      fontSize: 14,
-    },
-
+    transacoesCardTitle: { color: "#fff", fontSize: 16, fontWeight: "700" },
+    transacoesCardVazio: { padding: 32, alignItems: "center" },
+    transacoesCardVazioText: { color: "rgba(255,255,255,0.3)", fontSize: 14 },
     transacoesCardItem: {
       flexDirection: "row",
       alignItems: "center",
       padding: 16,
       paddingHorizontal: 18,
     },
-
     transacoesCardItemBorder: {
       borderBottomWidth: 1,
       borderBottomColor: "rgba(255,255,255,0.04)",
     },
-
     transacoesCardIconeDebito: {
-      width: 38,
-      height: 38,
-      borderRadius: 12,
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "rgba(232,85,85,0.12)",
-      marginRight: 14,
+      width: 38, height: 38, borderRadius: 12,
+      alignItems: "center", justifyContent: "center",
+      backgroundColor: "rgba(232,85,85,0.12)", marginRight: 14,
     },
-
     transacoesCardIconeCredito: {
-      width: 38,
-      height: 38,
-      borderRadius: 12,
-      alignItems: "center",
-      justifyContent: "center",
-      backgroundColor: "rgba(58,201,126,0.12)",
-      marginRight: 14,
+      width: 38, height: 38, borderRadius: 12,
+      alignItems: "center", justifyContent: "center",
+      backgroundColor: "rgba(58,201,126,0.12)", marginRight: 14,
     },
-
-    transacoesCardInfo: {
-      flex: 1,
-    },
-
-    transacoesCardDescricao: {
-      color: "#fff",
-      fontSize: 14,
-      fontWeight: "600",
-    },
-
-    transacoesCardMeta: {
-      color: "rgba(255,255,255,0.35)",
-      fontSize: 12,
-      marginTop: 2,
-    },
-
-    transacoesCardValorDebito: {
-      fontSize: 15,
-      fontWeight: "700",
-      color: "#e85555",
-    },
-
-    transacoesCardValorCredito: {
-      fontSize: 15,
-      fontWeight: "700",
-      color: "#3ac97e",
-    },
+    transacoesCardInfo: { flex: 1 },
+    transacoesCardDescricao: { color: "#fff", fontSize: 14, fontWeight: "600" },
+    transacoesCardMeta: { color: "rgba(255,255,255,0.35)", fontSize: 12, marginTop: 2 },
+    transacoesCardValorDebito: { fontSize: 15, fontWeight: "700", color: "#e85555" },
+    transacoesCardValorCredito: { fontSize: 15, fontWeight: "700", color: "#3ac97e" },
 
     // ─── Modal ───────────────────────────────
     modalOverlay: {
-      flex: 1,
-      backgroundColor: "rgba(0,0,0,0.6)",
-      justifyContent: "center",
-      alignItems: "center",
-      padding: 24,
+      flex: 1, backgroundColor: "rgba(0,0,0,0.6)",
+      justifyContent: "center", alignItems: "center", padding: 24,
+    },
+    modalBox: {
+      backgroundColor: "#1a2235", borderRadius: 16, padding: 24,
+      width: "100%", maxWidth: 360, borderWidth: 1, borderColor: "rgba(58,201,126,0.2)",
+    },
+    modalHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
+    modalTitle: { color: "#fff", fontSize: 18, fontWeight: "700" },
+    modalSubtitle: { color: "rgba(255,255,255,0.5)", fontSize: 13, marginBottom: 12 },
+    modalInputRow: {
+      flexDirection: "row", alignItems: "center",
+      backgroundColor: "rgba(255,255,255,0.06)", borderRadius: 10,
+      borderWidth: 1, borderColor: "rgba(58,201,126,0.3)",
+      paddingHorizontal: 14, marginBottom: 20,
+    },
+    modalInputPrefix: { color: "#3ac97e", fontSize: 16, marginRight: 8 },
+    modalInput: { flex: 1, color: "#fff", fontSize: 20, fontWeight: "600", paddingVertical: 14 },
+    modalButton: { backgroundColor: "#3ac97e", borderRadius: 10, paddingVertical: 14, alignItems: "center" },
+    modalButtonText: { color: "#0d1321", fontSize: 15, fontWeight: "700" },
+
+    // ════════════════════════════════════════
+    // EXTRATO
+    // ════════════════════════════════════════
+
+    extratoTitulo: {
+      color: "#fff",
+      fontSize: 28,
+      fontWeight: "800",
+      marginBottom: 24,
+      letterSpacing: 1,
     },
 
-    modalBox: {
+    extratoCardReceitas: {
+      flex: 1,
       backgroundColor: "#1a2235",
       borderRadius: 16,
-      padding: 24,
-      width: "100%",
-      maxWidth: 360,
+      padding: 18,
+      borderTopWidth: 3,
+      borderTopColor: "#3ac97e",
       borderWidth: 1,
-      borderColor: "rgba(58,201,126,0.2)",
+      borderColor: "rgba(255,255,255,0.06)",
     },
-
-    modalHeader: {
-      flexDirection: "row",
-      justifyContent: "space-between",
-      alignItems: "center",
-      marginBottom: 20,
+    extratoCardDespesas: {
+      flex: 1,
+      backgroundColor: "#1a2235",
+      borderRadius: 16,
+      padding: 18,
+      borderTopWidth: 3,
+      borderTopColor: "#e85555",
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.06)",
     },
-
-    modalTitle: {
-      color: "#fff",
-      fontSize: 18,
-      fontWeight: "700",
+    extratoCardSaldo: {
+      flex: 1,
+      backgroundColor: "#1a2235",
+      borderRadius: 16,
+      padding: 18,
+      borderTopWidth: 3,
+      borderTopColor: "#f59e0b",
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.06)",
     },
+    extratoCardLabel: {
+      color: "rgba(255,255,255,0.4)",
+      fontSize: 11,
+      fontWeight: "600",
+      marginBottom: 8,
+      letterSpacing: 1,
+    },
+    extratoCardValorVerde: { color: "#3ac97e", fontSize: 22, fontWeight: "800" },
+    extratoCardValorVermelho: { color: "#e85555", fontSize: 22, fontWeight: "800" },
+    extratoCardValorAmarelo: { color: "#f59e0b", fontSize: 22, fontWeight: "800" },
+    extratoCardSub: { color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 6 },
 
-    modalSubtitle: {
+    filtroBtn: {
+      paddingHorizontal: 16,
+      paddingVertical: 8,
+      borderRadius: 20,
+      backgroundColor: "rgba(255,255,255,0.06)",
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.08)",
+    },
+    filtroBtnAtivo: {
+      backgroundColor: "#3ac97e",
+      borderColor: "#3ac97e",
+    },
+    filtroBtnText: {
       color: "rgba(255,255,255,0.5)",
       fontSize: 13,
-      marginBottom: 12,
+      fontWeight: "600",
+    },
+    filtroBtnTextAtivo: {
+      color: "#0d1321",
     },
 
-    modalInputRow: {
+    extratoTableHeader: {
       flexDirection: "row",
       alignItems: "center",
-      backgroundColor: "rgba(255,255,255,0.06)",
-      borderRadius: 10,
-      borderWidth: 1,
-      borderColor: "rgba(58,201,126,0.3)",
-      paddingHorizontal: 14,
-      marginBottom: 20,
+      paddingHorizontal: 18,
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: "rgba(255,255,255,0.05)",
     },
-
-    modalInputPrefix: {
-      color: "#3ac97e",
-      fontSize: 16,
-      marginRight: 8,
-    },
-
-    modalInput: {
-      flex: 1,
-      color: "#fff",
-      fontSize: 20,
+    extratoTableHeaderText: {
+      color: "rgba(255,255,255,0.3)",
+      fontSize: 11,
       fontWeight: "600",
-      paddingVertical: 14,
+      letterSpacing: 1,
     },
 
-    modalButton: {
-      backgroundColor: "#3ac97e",
-      borderRadius: 10,
-      paddingVertical: 14,
+    categoriaTag: {
+      alignSelf: "flex-start",
+      paddingHorizontal: 10,
+      paddingVertical: 4,
+      borderRadius: 8,
+    },
+    categoriaTagText: {
+      fontSize: 12,
+      fontWeight: "600",
+    },
+
+    // ════════════════════════════════════════
+    // PERFIL
+    // ════════════════════════════════════════
+
+    perfilAvatarContainer: {
       alignItems: "center",
+      paddingVertical: 32,
+      marginBottom: 8,
     },
-
-    modalButtonText: {
+    perfilAvatar: {
+      width: 80,
+      height: 80,
+      borderRadius: 24,
+      backgroundColor: "#3ac97e",
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 16,
+    },
+    perfilAvatarText: {
+      fontSize: 36,
+      fontWeight: "800",
       color: "#0d1321",
+    },
+    perfilNome: {
+      color: "#fff",
+      fontSize: 22,
+      fontWeight: "800",
+      marginBottom: 4,
+    },
+    perfilSubtitle: {
+      color: "rgba(255,255,255,0.4)",
+      fontSize: 13,
+    },
+    perfilSecaoTitulo: {
+      color: "rgba(255,255,255,0.4)",
+      fontSize: 12,
+      fontWeight: "600",
+      letterSpacing: 1,
+      marginBottom: 12,
+      textTransform: "uppercase",
+    },
+    perfilCard: {
+      flex: 1,
+      backgroundColor: "#1a2235",
+      borderRadius: 16,
+      padding: 18,
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.06)",
+    },
+    perfilCardLabel: {
+      color: "rgba(255,255,255,0.4)",
+      fontSize: 11,
+      fontWeight: "600",
+      marginBottom: 8,
+      letterSpacing: 1,
+    },
+    perfilCardValor: {
+      color: "#fff",
+      fontSize: 22,
+      fontWeight: "800",
+    },
+    perfilCardValorVerde: {
+      color: "#3ac97e",
+      fontSize: 22,
+      fontWeight: "800",
+    },
+    perfilCardValorVermelho: {
+      color: "#e85555",
+      fontSize: 22,
+      fontWeight: "800",
+    },
+    perfilBotaoSair: {
+      marginTop: 32,
+      backgroundColor: "rgba(232,85,85,0.1)",
+      borderRadius: 14,
+      paddingVertical: 16,
+      alignItems: "center",
+      borderWidth: 1,
+      borderColor: "rgba(232,85,85,0.3)",
+    },
+    perfilBotaoSairText: {
+      color: "#e85555",
       fontSize: 15,
       fontWeight: "700",
     },

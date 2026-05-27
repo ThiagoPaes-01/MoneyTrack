@@ -4,17 +4,8 @@ import { color } from "../../Global/color";
 const c = color.colors;
 const { width } = Dimensions.get("window");
 
-const BREAKPOINTS = {
-  mobile: 0,
-  tablet: 768,
-  desktop: 1024,
-  wide: 1440,
-};
-
-// Helper para determinar dispositivo
-const isMobile = width < BREAKPOINTS.tablet;
-const isTablet = width >= BREAKPOINTS.tablet && width < BREAKPOINTS.desktop;
-const isDesktop = width >= BREAKPOINTS.desktop;
+const isMobile = width < 768;
+const isDesktop = width >= 1024;
 
 export const styles = StyleSheet.create({
   card: {
@@ -23,39 +14,45 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "rgba(255,255,255,0.06)",
     alignItems: "center",
-    padding: 15,
-    height: "20%",
-    width: isDesktop ? "48%" : "88%", 
-    flexWrap: isDesktop ? "wrap" : "nowrap",
+    flexDirection: "row",
+    padding: 20,
+    width: isDesktop ? "48%" : "88%",
+    // altura automática — quadrado pelo padding igual em todos os lados
+    minHeight: isDesktop ? 120 : 100,
   },
 
   iconWrapper: {
-    width: 66,
-    height: 66,
-    borderRadius: 16,
+    width: 56,
+    height: 56,
+    borderRadius: 14,
     backgroundColor: "rgba(58,201,126,0.12)",
-    marginRight: 15,
+    marginRight: 16,
     alignItems: "center",
     justifyContent: "center",
+    flexShrink: 0,
   },
 
   icon: {
-    width: 28,
-    height: 28,
+    width: 26,
+    height: 26,
     resizeMode: "contain",
     tintColor: c.success,
+  },
+
+  textWrapper: {
+    flex: 1,
   },
 
   title: {
     fontSize: 15,
     fontWeight: "700",
     color: c.white,
+    marginBottom: 6,
   },
 
   description: {
     fontSize: 13,
     color: "rgba(255, 255, 255, 0.67)",
     lineHeight: 20,
-    width: "75%",
   },
 });

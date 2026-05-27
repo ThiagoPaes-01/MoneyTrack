@@ -7,8 +7,10 @@ export function Funcionalidade({ image, title, func }) {
       <View style={styles.iconWrapper}>
         <Image source={image} style={styles.icon} />
       </View>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.description}>{func}</Text>
+      <View style={styles.textWrapper}>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.description}>{func}</Text>
+      </View>
     </View>
   );
 }
