@@ -1,26 +1,34 @@
-// src/Page/Menu/Menu.js
 import {
-  View, Text, TouchableOpacity, useWindowDimensions,
-  ActivityIndicator, ScrollView, Modal, TextInput,
-  KeyboardAvoidingView, Platform,
+  View,
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  ActivityIndicator,
+  ScrollView,
+  Modal,
+  TextInput,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
 } from "react-native";
 import { useState } from "react";
 import { useMenuStyles } from "./styles";
 import { useFinancas } from "../../hooks/useFinancas";
+import { usePatrimonio } from "../../hooks/usePatrimonio";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const NAV_ITEMS = [
   { label: "Dashboard", route: "Dashboard" },
-  { label: "Extrato",   route: "Extrato"   },
-  { label: "Relatórios",route: "Relatorios"},
-  { label: "Perfil",    route: "Perfil"    },
+  { label: "Extrato", route: "Extrato" },
+  { label: "Patrimônio", route: "Patrimonio" },
+  { label: "Perfil", route: "Perfil" },
 ];
 
 const MOBILE_ITEMS = [
-  { label: "Início",    route: "Dashboard" },
-  { label: "Extrato",   route: "Extrato"   },
-  { label: "Relatórios",route: "Relatorios"},
-  { label: "Perfil",    route: "Perfil"    },
+  { label: "Início", route: "Dashboard" },
+  { label: "Extrato", route: "Extrato" },
+  { label: "Patrimônio", route: "Patrimonio" },
+  { label: "Perfil", route: "Perfil" },
 ];
 
 function formatarValor(valor) {
@@ -30,7 +38,10 @@ function formatarValor(valor) {
 
 function formatarData(data) {
   if (!data) return "";
-  return new Date(data).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+  return new Date(data).toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "short",
+  });
 }
 
 function primeiroNome(nome) {
@@ -40,40 +51,105 @@ function primeiroNome(nome) {
 
 // ── Gráfico de Colunas ────────────────────────────────────────────
 function GraficoColunas({ dados }) {
-  if (!dados || dados.length === 0) return (
-    <View style={{ alignItems: "center", paddingVertical: 32 }}>
-      <Text style={{ color: "rgba(255,255,255,0.3)", fontSize: 13 }}>Sem dados suficientes</Text>
-    </View>
-  );
+  if (!dados || dados.length === 0)
+    return (
+      <View style={{ alignItems: "center", paddingVertical: 32 }}>
+        <Text style={{ color: "rgba(255,255,255,0.3)", fontSize: 13 }}>
+          Sem dados suficientes
+        </Text>
+      </View>
+    );
 
-  const max = Math.max(...dados.flatMap(d => [d.receitas || 0, d.despesas || 0]), 1);
+  const max = Math.max(
+    ...dados.flatMap((d) => [d.receitas || 0, d.despesas || 0]),
+    1,
+  );
   const altMax = 140;
 
   return (
     <View>
-      <View style={{ flexDirection: "row", alignItems: "flex-end", height: altMax + 40, gap: 4 }}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "flex-end",
+          height: altMax + 40,
+          gap: 4,
+        }}
+      >
         {dados.map((d, i) => (
-          <View key={i} style={{ flex: 1, alignItems: "center", justifyContent: "flex-end" }}>
-            <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 2, marginBottom: 6 }}>
+          <View
+            key={i}
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "flex-end",
+            }}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "flex-end",
+                gap: 2,
+                marginBottom: 6,
+              }}
+            >
               <View style={{ width: 10 }}>
-                <View style={{ height: Math.max((d.receitas / max) * altMax, 3), backgroundColor: "#3ac97e", borderRadius: 3 }} />
+                <View
+                  style={{
+                    height: Math.max((d.receitas / max) * altMax, 3),
+                    backgroundColor: "#3ac97e",
+                    borderRadius: 3,
+                  }}
+                />
               </View>
               <View style={{ width: 10 }}>
-                <View style={{ height: Math.max((d.despesas / max) * altMax, 3), backgroundColor: "#e85555", borderRadius: 3 }} />
+                <View
+                  style={{
+                    height: Math.max((d.despesas / max) * altMax, 3),
+                    backgroundColor: "#e85555",
+                    borderRadius: 3,
+                  }}
+                />
               </View>
             </View>
-            <Text style={{ color: "rgba(255,255,255,0.35)", fontSize: 10, textAlign: "center" }}>{d.mes}</Text>
+            <Text
+              style={{
+                color: "rgba(255,255,255,0.35)",
+                fontSize: 10,
+                textAlign: "center",
+              }}
+            >
+              {d.mes}
+            </Text>
           </View>
         ))}
       </View>
       <View style={{ flexDirection: "row", gap: 16, marginTop: 12 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-          <View style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: "#3ac97e" }} />
-          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>Receitas</Text>
+          <View
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: 2,
+              backgroundColor: "#3ac97e",
+            }}
+          />
+          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>
+            Receitas
+          </Text>
         </View>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-          <View style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: "#e85555" }} />
-          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>Despesas</Text>
+          <View
+            style={{
+              width: 10,
+              height: 10,
+              borderRadius: 2,
+              backgroundColor: "#e85555",
+            }}
+          />
+          <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>
+            Despesas
+          </Text>
         </View>
       </View>
     </View>
@@ -82,27 +158,68 @@ function GraficoColunas({ dados }) {
 
 // ── Gastos por Categoria ──────────────────────────────────────────
 function GraficoCategoria({ gastos }) {
-  if (!gastos || gastos.length === 0) return (
-    <View style={{ alignItems: "center", paddingVertical: 32 }}>
-      <Text style={{ color: "rgba(255,255,255,0.3)", fontSize: 13, textAlign: "center" }}>
-        Nenhuma despesa categorizada este mês
-      </Text>
-    </View>
-  );
+  if (!gastos || gastos.length === 0)
+    return (
+      <View style={{ alignItems: "center", paddingVertical: 32 }}>
+        <Text
+          style={{
+            color: "rgba(255,255,255,0.3)",
+            fontSize: 13,
+            textAlign: "center",
+          }}
+        >
+          Nenhuma despesa categorizada este mês
+        </Text>
+      </View>
+    );
 
   return (
     <View style={{ gap: 12 }}>
       {gastos.map((g, i) => (
         <View key={i} style={{ gap: 6 }}>
-          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <Text style={{ color: "rgba(255,255,255,0.7)", fontSize: 13 }} numberOfLines={1}>{g.nome}</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-              <Text style={{ color: "rgba(255,255,255,0.35)", fontSize: 11 }}>{formatarValor(g.valor)}</Text>
-              <Text style={{ color: g.cor, fontSize: 13, fontWeight: "700", minWidth: 36, textAlign: "right" }}>{g.percentual}%</Text>
+          <View
+            style={{ flexDirection: "row", justifyContent: "space-between" }}
+          >
+            <Text
+              style={{ color: "rgba(255,255,255,0.7)", fontSize: 13 }}
+              numberOfLines={1}
+            >
+              {g.nome}
+            </Text>
+            <View
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
+              <Text style={{ color: "rgba(255,255,255,0.35)", fontSize: 11 }}>
+                {formatarValor(g.valor)}
+              </Text>
+              <Text
+                style={{
+                  color: g.cor,
+                  fontSize: 13,
+                  fontWeight: "700",
+                  minWidth: 36,
+                  textAlign: "right",
+                }}
+              >
+                {g.percentual}%
+              </Text>
             </View>
           </View>
-          <View style={{ height: 6, backgroundColor: "rgba(255,255,255,0.08)", borderRadius: 3 }}>
-            <View style={{ height: 6, width: `${g.percentual}%`, backgroundColor: g.cor, borderRadius: 3 }} />
+          <View
+            style={{
+              height: 6,
+              backgroundColor: "rgba(255,255,255,0.08)",
+              borderRadius: 3,
+            }}
+          >
+            <View
+              style={{
+                height: 6,
+                width: `${g.percentual}%`,
+                backgroundColor: g.cor,
+                borderRadius: 3,
+              }}
+            />
           </View>
         </View>
       ))}
@@ -116,18 +233,32 @@ function SalarioModal({ visivel, onFechar, onSalvar, styles }) {
 
   function handleSalvar() {
     const num = parseFloat(valor.replace(",", "."));
-    if (!isNaN(num) && num > 0) { onSalvar(num); onFechar(); setValor(""); }
+    if (!isNaN(num) && num > 0) {
+      onSalvar(num);
+      onFechar();
+      setValor("");
+    }
   }
 
   return (
-    <Modal visible={visivel} transparent animationType="fade" onRequestClose={onFechar}>
-      <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"} style={{ flex: 1 }}>
+    <Modal
+      visible={visivel}
+      transparent
+      animationType="fade"
+      onRequestClose={onFechar}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>Definir salário</Text>
               <TouchableOpacity onPress={onFechar}>
-                <Text style={{ color: "rgba(255,255,255,0.5)", fontSize: 18 }}>✕</Text>
+                <Text style={{ color: "rgba(255,255,255,0.5)", fontSize: 18 }}>
+                  ✕
+                </Text>
               </TouchableOpacity>
             </View>
             <Text style={styles.modalSubtitle}>Informe seu salário mensal</Text>
@@ -153,45 +284,113 @@ function SalarioModal({ visivel, onFechar, onSalvar, styles }) {
 }
 
 // ── Dashboard ─────────────────────────────────────────────────────
-function DashboardContent({ styles, saldoTotal, salario, salvarSalario, transacoes, carregando, nomeUsuario, dadosGrafico, gastosPorCategoria, totalDespesas }) {
+function DashboardContent({
+  styles,
+  saldoTotal,
+  salario,
+  salvarSalario,
+  transacoes,
+  carregando,
+  nomeUsuario,
+  dadosGrafico,
+  gastosPorCategoria,
+  totalDespesas,
+}) {
   const [modalVisivel, setModalVisivel] = useState(false);
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768;
 
   return (
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 24, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.dashboardGreeting}>
-        <Text style={styles.dashboardGreetingSubtitle}>Bem-vindo de volta,</Text>
-        <Text style={styles.dashboardGreetingTitle}>{primeiroNome(nomeUsuario) || "usuário"} 👋</Text>
+        <Text style={styles.dashboardGreetingSubtitle}>
+          Bem-vindo de volta,
+        </Text>
+        <Text style={styles.dashboardGreetingTitle}>
+          {primeiroNome(nomeUsuario) || "usuário"} 👋
+        </Text>
       </View>
 
       <View style={styles.cardsRow}>
         <View style={styles.cardSaldo}>
           <Text style={styles.cardSaldoLabel}>SALDO TOTAL</Text>
-          {carregando ? <ActivityIndicator size="small" color="#0d1321" /> : <Text style={styles.cardSaldoValor}>{formatarValor(saldoTotal)}</Text>}
+          {carregando ? (
+            <ActivityIndicator size="small" color="#0d1321" />
+          ) : (
+            <Text style={styles.cardSaldoValor}>
+              {formatarValor(saldoTotal)}
+            </Text>
+          )}
         </View>
-        <TouchableOpacity onPress={() => setModalVisivel(true)} style={styles.cardSalario}>
+        <TouchableOpacity
+          onPress={() => setModalVisivel(true)}
+          style={styles.cardSalario}
+        >
           <View style={styles.cardSalarioHeader}>
             <Text style={styles.cardSalarioLabel}>SALÁRIO</Text>
-            <Text style={{ color: "rgba(58,201,126,0.6)", fontSize: 12 }}>✎</Text>
+            <Text style={{ color: "rgba(58,201,126,0.6)", fontSize: 12 }}>
+              ✎
+            </Text>
           </View>
-          <Text style={styles.cardSalarioValor}>{salario ? formatarValor(salario) : "Definir"}</Text>
+          <Text style={styles.cardSalarioValor}>
+            {salario ? formatarValor(salario) : "Definir"}
+          </Text>
           <Text style={styles.cardSalarioHint}>Toque para editar</Text>
         </TouchableOpacity>
         <View style={styles.cardDespesas}>
           <Text style={styles.cardDespesasLabel}>DESPESAS (MÊS)</Text>
-          {carregando ? <ActivityIndicator size="small" color="#e85555" /> : <Text style={styles.cardDespesasValor}>{formatarValor(totalDespesas)}</Text>}
+          {carregando ? (
+            <ActivityIndicator size="small" color="#e85555" />
+          ) : (
+            <Text style={styles.cardDespesasValor}>
+              {formatarValor(totalDespesas)}
+            </Text>
+          )}
         </View>
       </View>
 
-      <View style={[{ marginBottom: 24 }, isDesktop && { flexDirection: "row", gap: 16 }]}>
-        <View style={[styles.transacoesCard, { padding: 18 }, isDesktop && { flex: 2 }, !isDesktop && { marginBottom: 16 }]}>
-          <Text style={[styles.transacoesCardTitle, { marginBottom: 16 }]}>Receitas vs Despesas</Text>
-          {carregando ? <ActivityIndicator size="small" color="#3ac97e" /> : <GraficoColunas dados={dadosGrafico} />}
+      <View
+        style={[
+          { marginBottom: 24 },
+          isDesktop && { flexDirection: "row", gap: 16 },
+        ]}
+      >
+        <View
+          style={[
+            styles.transacoesCard,
+            { padding: 18 },
+            isDesktop && { flex: 2 },
+            !isDesktop && { marginBottom: 16 },
+          ]}
+        >
+          <Text style={[styles.transacoesCardTitle, { marginBottom: 16 }]}>
+            Receitas vs Despesas
+          </Text>
+          {carregando ? (
+            <ActivityIndicator size="small" color="#3ac97e" />
+          ) : (
+            <GraficoColunas dados={dadosGrafico} />
+          )}
         </View>
-        <View style={[styles.transacoesCard, { padding: 18 }, isDesktop && { flex: 1, minWidth: 240 }]}>
-          <Text style={[styles.transacoesCardTitle, { marginBottom: 16 }]}>Gastos por categoria</Text>
-          {carregando ? <ActivityIndicator size="small" color="#3ac97e" /> : <GraficoCategoria gastos={gastosPorCategoria} />}
+        <View
+          style={[
+            styles.transacoesCard,
+            { padding: 18 },
+            isDesktop && { flex: 1, minWidth: 240 },
+          ]}
+        >
+          <Text style={[styles.transacoesCardTitle, { marginBottom: 16 }]}>
+            Gastos por categoria
+          </Text>
+          {carregando ? (
+            <ActivityIndicator size="small" color="#3ac97e" />
+          ) : (
+            <GraficoCategoria gastos={gastosPorCategoria} />
+          )}
         </View>
       </View>
 
@@ -200,40 +399,97 @@ function DashboardContent({ styles, saldoTotal, salario, salvarSalario, transaco
           <Text style={styles.transacoesCardTitle}>Últimas transações</Text>
         </View>
         {carregando ? (
-          <View style={styles.transacoesCardVazio}><ActivityIndicator size="small" color="#3ac97e" /></View>
+          <View style={styles.transacoesCardVazio}>
+            <ActivityIndicator size="small" color="#3ac97e" />
+          </View>
         ) : transacoes.length === 0 ? (
-          <View style={styles.transacoesCardVazio}><Text style={styles.transacoesCardVazioText}>Nenhuma transação encontrada</Text></View>
-        ) : transacoes.map((t, index) => (
-          <View key={t.id} style={[styles.transacoesCardItem, index < transacoes.length - 1 && styles.transacoesCardItemBorder]}>
-            <View style={t.tipo === "DEBIT" ? styles.transacoesCardIconeDebito : styles.transacoesCardIconeCredito}>
-              <Text style={{ color: t.tipo === "DEBIT" ? "#e85555" : "#3ac97e", fontSize: 14 }}>{t.tipo === "DEBIT" ? "↓" : "↑"}</Text>
-            </View>
-            <View style={styles.transacoesCardInfo}>
-              <Text style={styles.transacoesCardDescricao} numberOfLines={1}>{t.descricao || t.categoria || "—"}</Text>
-              <Text style={styles.transacoesCardMeta}>{t.categoria || ""}{t.categoria && t.data ? "  ·  " : ""}{formatarData(t.data)}</Text>
-            </View>
-            <Text style={t.tipo === "DEBIT" ? styles.transacoesCardValorDebito : styles.transacoesCardValorCredito}>
-              {t.tipo === "DEBIT" ? "-" : "+"}{formatarValor(Math.abs(t.valor))}
+          <View style={styles.transacoesCardVazio}>
+            <Text style={styles.transacoesCardVazioText}>
+              Nenhuma transação encontrada
             </Text>
           </View>
-        ))}
+        ) : (
+          transacoes.map((t, index) => (
+            <View
+              key={t.id}
+              style={[
+                styles.transacoesCardItem,
+                index < transacoes.length - 1 &&
+                  styles.transacoesCardItemBorder,
+              ]}
+            >
+              <View
+                style={
+                  t.tipo === "DEBIT"
+                    ? styles.transacoesCardIconeDebito
+                    : styles.transacoesCardIconeCredito
+                }
+              >
+                <Text
+                  style={{
+                    color: t.tipo === "DEBIT" ? "#e85555" : "#3ac97e",
+                    fontSize: 14,
+                  }}
+                >
+                  {t.tipo === "DEBIT" ? "↓" : "↑"}
+                </Text>
+              </View>
+              <View style={styles.transacoesCardInfo}>
+                <Text style={styles.transacoesCardDescricao} numberOfLines={1}>
+                  {t.descricao || t.categoria || "—"}
+                </Text>
+                <Text style={styles.transacoesCardMeta}>
+                  {t.categoria || ""}
+                  {t.categoria && t.data ? "  ·  " : ""}
+                  {formatarData(t.data)}
+                </Text>
+              </View>
+              <Text
+                style={
+                  t.tipo === "DEBIT"
+                    ? styles.transacoesCardValorDebito
+                    : styles.transacoesCardValorCredito
+                }
+              >
+                {t.tipo === "DEBIT" ? "-" : "+"}
+                {formatarValor(Math.abs(t.valor))}
+              </Text>
+            </View>
+          ))
+        )}
       </View>
 
-      <SalarioModal visivel={modalVisivel} onFechar={() => setModalVisivel(false)} onSalvar={salvarSalario} styles={styles} />
+      <SalarioModal
+        visivel={modalVisivel}
+        onFechar={() => setModalVisivel(false)}
+        onSalvar={salvarSalario}
+        styles={styles}
+      />
     </ScrollView>
   );
 }
 
-// ── Extrato
-function ExtratoContent({ styles, transacoes, carregando, totalReceitas, totalDespesas }) {
+// ── Extrato ───────────────────────────────────────────────────────
+function ExtratoContent({
+  styles,
+  transacoes,
+  carregando,
+  totalReceitas,
+  totalDespesas,
+}) {
   const [filtro, setFiltro] = useState("Todos");
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768;
 
   // Categorias únicas para filtros
-  const categorias = ["Todos", "Receitas", "Despesas", ...new Set(transacoes.map(t => t.categoria).filter(Boolean))];
+  const categorias = [
+    "Todos",
+    "Receitas",
+    "Despesas",
+    ...new Set(transacoes.map((t) => t.categoria).filter(Boolean)),
+  ];
 
-  const transacoesFiltradas = transacoes.filter(t => {
+  const transacoesFiltradas = transacoes.filter((t) => {
     if (filtro === "Todos") return true;
     if (filtro === "Receitas") return t.tipo === "CREDIT";
     if (filtro === "Despesas") return t.tipo === "DEBIT";
@@ -243,8 +499,11 @@ function ExtratoContent({ styles, transacoes, carregando, totalReceitas, totalDe
   const saldoPeriodo = totalReceitas - totalDespesas;
 
   return (
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 24, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Título */}
       <Text style={styles.extratoTitulo}>Extrato</Text>
 
@@ -252,43 +511,76 @@ function ExtratoContent({ styles, transacoes, carregando, totalReceitas, totalDe
       <View style={[styles.cardsRow, { marginBottom: 24 }]}>
         <View style={styles.extratoCardReceitas}>
           <Text style={styles.extratoCardLabel}>RECEITAS (MÊS)</Text>
-          {carregando ? <ActivityIndicator size="small" color="#3ac97e" /> : (
+          {carregando ? (
+            <ActivityIndicator size="small" color="#3ac97e" />
+          ) : (
             <>
-              <Text style={styles.extratoCardValorVerde}>{formatarValor(totalReceitas)}</Text>
-              <Text style={styles.extratoCardSub}>{transacoes.filter(t => t.tipo === "CREDIT").length} transações</Text>
+              <Text style={styles.extratoCardValorVerde}>
+                {formatarValor(totalReceitas)}
+              </Text>
+              <Text style={styles.extratoCardSub}>
+                {transacoes.filter((t) => t.tipo === "CREDIT").length}{" "}
+                transações
+              </Text>
             </>
           )}
         </View>
         <View style={styles.extratoCardDespesas}>
           <Text style={styles.extratoCardLabel}>DESPESAS (MÊS)</Text>
-          {carregando ? <ActivityIndicator size="small" color="#e85555" /> : (
+          {carregando ? (
+            <ActivityIndicator size="small" color="#e85555" />
+          ) : (
             <>
-              <Text style={styles.extratoCardValorVermelho}>{formatarValor(totalDespesas)}</Text>
-              <Text style={styles.extratoCardSub}>{transacoes.filter(t => t.tipo === "DEBIT").length} transações</Text>
+              <Text style={styles.extratoCardValorVermelho}>
+                {formatarValor(totalDespesas)}
+              </Text>
+              <Text style={styles.extratoCardSub}>
+                {transacoes.filter((t) => t.tipo === "DEBIT").length} transações
+              </Text>
             </>
           )}
         </View>
         <View style={styles.extratoCardSaldo}>
           <Text style={styles.extratoCardLabel}>SALDO DO PERÍODO</Text>
-          {carregando ? <ActivityIndicator size="small" color="#f59e0b" /> : (
+          {carregando ? (
+            <ActivityIndicator size="small" color="#f59e0b" />
+          ) : (
             <>
-              <Text style={styles.extratoCardValorAmarelo}>{formatarValor(saldoPeriodo)}</Text>
-              <Text style={styles.extratoCardSub}>{saldoPeriodo >= 0 ? "✓ positivo" : "⚠ negativo"}</Text>
+              <Text style={styles.extratoCardValorAmarelo}>
+                {formatarValor(saldoPeriodo)}
+              </Text>
+              <Text style={styles.extratoCardSub}>
+                {saldoPeriodo >= 0 ? "✓ positivo" : "⚠ negativo"}
+              </Text>
             </>
           )}
         </View>
       </View>
 
       {/* Filtros */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 20 }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ marginBottom: 20 }}
+      >
         <View style={{ flexDirection: "row", gap: 8, paddingVertical: 4 }}>
-          {categorias.map(cat => (
+          {categorias.map((cat) => (
             <TouchableOpacity
               key={cat}
               onPress={() => setFiltro(cat)}
-              style={[styles.filtroBtn, filtro === cat && styles.filtroBtnAtivo]}
+              style={[
+                styles.filtroBtn,
+                filtro === cat && styles.filtroBtnAtivo,
+              ]}
             >
-              <Text style={[styles.filtroBtnText, filtro === cat && styles.filtroBtnTextAtivo]}>{cat}</Text>
+              <Text
+                style={[
+                  styles.filtroBtnText,
+                  filtro === cat && styles.filtroBtnTextAtivo,
+                ]}
+              >
+                {cat}
+              </Text>
             </TouchableOpacity>
           ))}
         </View>
@@ -299,52 +591,140 @@ function ExtratoContent({ styles, transacoes, carregando, totalReceitas, totalDe
         {/* Header da tabela — só desktop */}
         {isDesktop && (
           <View style={[styles.extratoTableHeader]}>
-            <Text style={[styles.extratoTableHeaderText, { flex: 2 }]}>DESCRIÇÃO</Text>
-            <Text style={[styles.extratoTableHeaderText, { flex: 1 }]}>CATEGORIA</Text>
-            <Text style={[styles.extratoTableHeaderText, { flex: 1 }]}>DATA</Text>
-            <Text style={[styles.extratoTableHeaderText, { flex: 1, textAlign: "right" }]}>VALOR</Text>
+            <Text style={[styles.extratoTableHeaderText, { flex: 2 }]}>
+              DESCRIÇÃO
+            </Text>
+            <Text style={[styles.extratoTableHeaderText, { flex: 1 }]}>
+              CATEGORIA
+            </Text>
+            <Text style={[styles.extratoTableHeaderText, { flex: 1 }]}>
+              DATA
+            </Text>
+            <Text
+              style={[
+                styles.extratoTableHeaderText,
+                { flex: 1, textAlign: "right" },
+              ]}
+            >
+              VALOR
+            </Text>
           </View>
         )}
 
         {carregando ? (
-          <View style={styles.transacoesCardVazio}><ActivityIndicator size="small" color="#3ac97e" /></View>
+          <View style={styles.transacoesCardVazio}>
+            <ActivityIndicator size="small" color="#3ac97e" />
+          </View>
         ) : transacoesFiltradas.length === 0 ? (
-          <View style={styles.transacoesCardVazio}><Text style={styles.transacoesCardVazioText}>Nenhuma transação encontrada</Text></View>
-        ) : transacoesFiltradas.map((t, index) => (
-          <View key={t.id} style={[styles.transacoesCardItem, index < transacoesFiltradas.length - 1 && styles.transacoesCardItemBorder]}>
-            {/* Ícone */}
-            <View style={t.tipo === "DEBIT" ? styles.transacoesCardIconeDebito : styles.transacoesCardIconeCredito}>
-              <Text style={{ color: t.tipo === "DEBIT" ? "#e85555" : "#3ac97e", fontSize: 14 }}>{t.tipo === "DEBIT" ? "↓" : "↑"}</Text>
-            </View>
-
-            {/* Descrição */}
-            <View style={[styles.transacoesCardInfo, { flex: isDesktop ? 2 : 1 }]}>
-              <Text style={styles.transacoesCardDescricao} numberOfLines={1}>{t.descricao || "—"}</Text>
-              {!isDesktop && <Text style={styles.transacoesCardMeta}>{t.categoria || ""}{t.categoria && t.data ? "  ·  " : ""}{formatarData(t.data)}</Text>}
-            </View>
-
-            {/* Categoria — só desktop */}
-            {isDesktop && (
-              <View style={{ flex: 1 }}>
-                {t.categoria ? (
-                  <View style={[styles.categoriaTag, { backgroundColor: getCategoriaColor(t.categoria) + "22" }]}>
-                    <Text style={[styles.categoriaTagText, { color: getCategoriaColor(t.categoria) }]}>{t.categoria}</Text>
-                  </View>
-                ) : <Text style={{ color: "rgba(255,255,255,0.2)", fontSize: 12 }}>—</Text>}
-              </View>
-            )}
-
-            {/* Data — só desktop */}
-            {isDesktop && (
-              <Text style={{ flex: 1, color: "rgba(255,255,255,0.35)", fontSize: 13 }}>{formatarData(t.data)}</Text>
-            )}
-
-            {/* Valor */}
-            <Text style={[t.tipo === "DEBIT" ? styles.transacoesCardValorDebito : styles.transacoesCardValorCredito, { minWidth: 90, textAlign: "right" }]}>
-              {t.tipo === "DEBIT" ? "-" : "+"}{formatarValor(Math.abs(t.valor))}
+          <View style={styles.transacoesCardVazio}>
+            <Text style={styles.transacoesCardVazioText}>
+              Nenhuma transação encontrada
             </Text>
           </View>
-        ))}
+        ) : (
+          transacoesFiltradas.map((t, index) => (
+            <View
+              key={t.id}
+              style={[
+                styles.transacoesCardItem,
+                index < transacoesFiltradas.length - 1 &&
+                  styles.transacoesCardItemBorder,
+              ]}
+            >
+              {/* Ícone */}
+              <View
+                style={
+                  t.tipo === "DEBIT"
+                    ? styles.transacoesCardIconeDebito
+                    : styles.transacoesCardIconeCredito
+                }
+              >
+                <Text
+                  style={{
+                    color: t.tipo === "DEBIT" ? "#e85555" : "#3ac97e",
+                    fontSize: 14,
+                  }}
+                >
+                  {t.tipo === "DEBIT" ? "↓" : "↑"}
+                </Text>
+              </View>
+
+              {/* Descrição */}
+              <View
+                style={[styles.transacoesCardInfo, { flex: isDesktop ? 2 : 1 }]}
+              >
+                <Text style={styles.transacoesCardDescricao} numberOfLines={1}>
+                  {t.descricao || "—"}
+                </Text>
+                {!isDesktop && (
+                  <Text style={styles.transacoesCardMeta}>
+                    {t.categoria || ""}
+                    {t.categoria && t.data ? "  ·  " : ""}
+                    {formatarData(t.data)}
+                  </Text>
+                )}
+              </View>
+
+              {/* Categoria — só desktop */}
+              {isDesktop && (
+                <View style={{ flex: 1 }}>
+                  {t.categoria ? (
+                    <View
+                      style={[
+                        styles.categoriaTag,
+                        {
+                          backgroundColor:
+                            getCategoriaColor(t.categoria) + "22",
+                        },
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.categoriaTagText,
+                          { color: getCategoriaColor(t.categoria) },
+                        ]}
+                      >
+                        {t.categoria}
+                      </Text>
+                    </View>
+                  ) : (
+                    <Text
+                      style={{ color: "rgba(255,255,255,0.2)", fontSize: 12 }}
+                    >
+                      —
+                    </Text>
+                  )}
+                </View>
+              )}
+
+              {/* Data — só desktop */}
+              {isDesktop && (
+                <Text
+                  style={{
+                    flex: 1,
+                    color: "rgba(255,255,255,0.35)",
+                    fontSize: 13,
+                  }}
+                >
+                  {formatarData(t.data)}
+                </Text>
+              )}
+
+              {/* Valor */}
+              <Text
+                style={[
+                  t.tipo === "DEBIT"
+                    ? styles.transacoesCardValorDebito
+                    : styles.transacoesCardValorCredito,
+                  { minWidth: 90, textAlign: "right" },
+                ]}
+              >
+                {t.tipo === "DEBIT" ? "-" : "+"}
+                {formatarValor(Math.abs(t.valor))}
+              </Text>
+            </View>
+          ))
+        )}
       </View>
     </ScrollView>
   );
@@ -352,26 +732,34 @@ function ExtratoContent({ styles, transacoes, carregando, totalReceitas, totalDe
 
 function getCategoriaColor(categoria) {
   const cores = {
-    "Alimentação": "#f59e0b",
-    "Transporte": "#3b82f6",
-    "Moradia": "#8b5cf6",
-    "Entretenimento": "#ec4899",
-    "Saúde": "#10b981",
-    "Renda": "#3ac97e",
-    "Salary": "#3ac97e",
-    "Housing": "#8b5cf6",
-    "Electricity": "#f59e0b",
+    Alimentação: "#f59e0b",
+    Transporte: "#3b82f6",
+    Moradia: "#8b5cf6",
+    Entretenimento: "#ec4899",
+    Saúde: "#10b981",
+    Renda: "#3ac97e",
+    Salary: "#3ac97e",
+    Housing: "#8b5cf6",
+    Electricity: "#f59e0b",
     "Music streaming": "#ec4899",
     "Video streaming": "#ec4899",
     "Gyms and fitness centers": "#10b981",
-    "Telecommunications": "#3b82f6",
+    Telecommunications: "#3b82f6",
     "Transfer - Bank Slip": "#6b7280",
   };
   return cores[categoria] || "#6b7280";
 }
 
-// ── Perfil
-function PerfilContent({ styles, nomeUsuario, saldoTotal, totalReceitas, totalDespesas, transacoes, navigation }) {
+// ── Perfil ────────────────────────────────────────────────────────
+function PerfilContent({
+  styles,
+  nomeUsuario,
+  saldoTotal,
+  totalReceitas,
+  totalDespesas,
+  transacoes,
+  navigation,
+}) {
   async function handleSair() {
     await AsyncStorage.removeItem("usuarioId");
     await AsyncStorage.removeItem("token");
@@ -379,14 +767,19 @@ function PerfilContent({ styles, nomeUsuario, saldoTotal, totalReceitas, totalDe
   }
 
   return (
-    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 24, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
-
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={styles.extratoTitulo}>Perfil</Text>
 
       {/* Avatar e nome */}
       <View style={styles.perfilAvatarContainer}>
         <View style={styles.perfilAvatar}>
-          <Text style={styles.perfilAvatarText}>{nomeUsuario ? nomeUsuario[0].toUpperCase() : "?"}</Text>
+          <Text style={styles.perfilAvatarText}>
+            {nomeUsuario ? nomeUsuario[0].toUpperCase() : "?"}
+          </Text>
         </View>
         <Text style={styles.perfilNome}>{nomeUsuario || "Usuário"}</Text>
         <Text style={styles.perfilSubtitle}>Conta gratuita</Text>
@@ -397,7 +790,9 @@ function PerfilContent({ styles, nomeUsuario, saldoTotal, totalReceitas, totalDe
       <View style={styles.cardsRow}>
         <View style={styles.perfilCard}>
           <Text style={styles.perfilCardLabel}>SALDO TOTAL</Text>
-          <Text style={styles.perfilCardValorVerde}>{formatarValor(saldoTotal)}</Text>
+          <Text style={styles.perfilCardValorVerde}>
+            {formatarValor(saldoTotal)}
+          </Text>
         </View>
         <View style={styles.perfilCard}>
           <Text style={styles.perfilCardLabel}>TRANSAÇÕES</Text>
@@ -407,11 +802,15 @@ function PerfilContent({ styles, nomeUsuario, saldoTotal, totalReceitas, totalDe
       <View style={styles.cardsRow}>
         <View style={styles.perfilCard}>
           <Text style={styles.perfilCardLabel}>RECEITAS (MÊS)</Text>
-          <Text style={styles.perfilCardValorVerde}>{formatarValor(totalReceitas)}</Text>
+          <Text style={styles.perfilCardValorVerde}>
+            {formatarValor(totalReceitas)}
+          </Text>
         </View>
         <View style={styles.perfilCard}>
           <Text style={styles.perfilCardLabel}>DESPESAS (MÊS)</Text>
-          <Text style={styles.perfilCardValorVermelho}>{formatarValor(totalDespesas)}</Text>
+          <Text style={styles.perfilCardValorVermelho}>
+            {formatarValor(totalDespesas)}
+          </Text>
         </View>
       </View>
 
@@ -419,7 +818,6 @@ function PerfilContent({ styles, nomeUsuario, saldoTotal, totalReceitas, totalDe
       <TouchableOpacity onPress={handleSair} style={styles.perfilBotaoSair}>
         <Text style={styles.perfilBotaoSairText}>Sair da conta</Text>
       </TouchableOpacity>
-
     </ScrollView>
   );
 }
@@ -427,13 +825,328 @@ function PerfilContent({ styles, nomeUsuario, saldoTotal, totalReceitas, totalDe
 // ── Relatórios (placeholder) ──────────────────────────────────────
 function RelatoriosContent({ styles }) {
   return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", padding: 24 }}>
+    <View
+      style={{
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 24,
+      }}
+    >
       <Text style={{ fontSize: 40, marginBottom: 16 }}>📊</Text>
-      <Text style={{ color: "#fff", fontSize: 20, fontWeight: "700", marginBottom: 8 }}>Em breve</Text>
-      <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 14, textAlign: "center" }}>
+      <Text
+        style={{
+          color: "#fff",
+          fontSize: 20,
+          fontWeight: "700",
+          marginBottom: 8,
+        }}
+      >
+        Em breve
+      </Text>
+      <Text
+        style={{
+          color: "rgba(255,255,255,0.4)",
+          fontSize: 14,
+          textAlign: "center",
+        }}
+      >
         A tela de relatórios avançados está sendo desenvolvida.
       </Text>
     </View>
+  );
+}
+
+// ── Patrimônio ────────────────────────────────────────────────────
+function PatrimonioContent({ styles }) {
+  const {
+    patrimonios,
+    loans,
+    contasCredito,
+    carregando,
+    totalPatrimonio,
+    totalDividas,
+    saldoLiquido,
+    status,
+    adicionarPatrimonio,
+    removerPatrimonio,
+  } = usePatrimonio();
+
+  const [nomeItem, setNomeItem] = useState("");
+  const [valorItem, setValorItem] = useState("");
+  const [salvando, setSalvando] = useState(false);
+
+  async function handleAdicionar() {
+    const val = parseFloat(valorItem.replace(",", "."));
+    if (!nomeItem.trim() || isNaN(val) || val <= 0) return;
+    setSalvando(true);
+    const { error } = await adicionarPatrimonio(nomeItem.trim(), val);
+    if (!error) {
+      setNomeItem("");
+      setValorItem("");
+    }
+    setSalvando(false);
+  }
+
+  const statusConfig = {
+    azul: {
+      cor: "#3ac97e",
+      bg: "rgba(58,201,126,0.1)",
+      borda: "rgba(58,201,126,0.3)",
+      emoji: "\u2705",
+      texto: "Ficaria no azul! Sobrariam",
+    },
+    zero: {
+      cor: "#f59e0b",
+      bg: "rgba(245,158,11,0.1)",
+      borda: "rgba(245,158,11,0.3)",
+      emoji: "\u2696\uFE0F",
+      texto: "Ficaria no zero. Saldo de",
+    },
+    vermelho: {
+      cor: "#e85555",
+      bg: "rgba(232,85,85,0.1)",
+      borda: "rgba(232,85,85,0.3)",
+      emoji: "\u26A0\uFE0F",
+      texto: "Ficaria no vermelho. Faltariam",
+    },
+  };
+  const cfg = statusConfig[status];
+
+  return (
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
+      showsVerticalScrollIndicator={false}
+    >
+      <Text style={styles.extratoTitulo}>Patrimônio</Text>
+
+      <View style={[styles.transacoesCard, { padding: 18, marginBottom: 20 }]}>
+        <Text style={[styles.transacoesCardTitle, { marginBottom: 16 }]}>
+          Adicionar item
+        </Text>
+        <TextInput
+          value={nomeItem}
+          onChangeText={setNomeItem}
+          placeholder="Nome do item (ex: Carro, Casa)"
+          placeholderTextColor="rgba(255,255,255,0.2)"
+          style={styles.patrimonioInput}
+        />
+        <View style={{ flexDirection: "row", gap: 10, marginTop: 10 }}>
+          <View style={[styles.modalInputRow, { flex: 1, marginBottom: 0 }]}>
+            <Text style={styles.modalInputPrefix}>R$</Text>
+            <TextInput
+              value={valorItem}
+              onChangeText={setValorItem}
+              keyboardType="numeric"
+              placeholder="0,00"
+              placeholderTextColor="rgba(255,255,255,0.2)"
+              style={[styles.modalInput, { paddingVertical: 10 }]}
+            />
+          </View>
+          <TouchableOpacity
+            onPress={handleAdicionar}
+            disabled={salvando}
+            style={[
+              styles.modalButton,
+              {
+                paddingHorizontal: 20,
+                paddingVertical: 0,
+                justifyContent: "center",
+              },
+            ]}
+          >
+            {salvando ? (
+              <ActivityIndicator size="small" color="#0d1321" />
+            ) : (
+              <Text style={styles.modalButtonText}>+ Adicionar</Text>
+            )}
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      <View style={[styles.cardsRow, { marginBottom: 20 }]}>
+        <View
+          style={[styles.perfilCard, { borderColor: "rgba(58,201,126,0.2)" }]}
+        >
+          <Text style={styles.perfilCardLabel}>TOTAL PATRIMÔNIO</Text>
+          <Text style={styles.perfilCardValorVerde}>
+            {formatarValor(totalPatrimonio)}
+          </Text>
+          <Text
+            style={{
+              color: "rgba(255,255,255,0.3)",
+              fontSize: 11,
+              marginTop: 4,
+            }}
+          >
+            {patrimonios.length} itens
+          </Text>
+        </View>
+        <View
+          style={[styles.perfilCard, { borderColor: "rgba(232,85,85,0.2)" }]}
+        >
+          <Text style={styles.perfilCardLabel}>TOTAL DÍVIDAS</Text>
+          <Text style={styles.perfilCardValorVermelho}>
+            {formatarValor(totalDividas)}
+          </Text>
+          <Text
+            style={{
+              color: "rgba(255,255,255,0.3)",
+              fontSize: 11,
+              marginTop: 4,
+            }}
+          >
+            {loans.length} empréstimos + cartão
+          </Text>
+        </View>
+      </View>
+
+      <View
+        style={{
+          backgroundColor: cfg.bg,
+          borderRadius: 16,
+          padding: 20,
+          borderWidth: 1,
+          borderColor: cfg.borda,
+          marginBottom: 24,
+        }}
+      >
+        <Text
+          style={{
+            color: "rgba(255,255,255,0.5)",
+            fontSize: 12,
+            fontWeight: "600",
+            marginBottom: 8,
+          }}
+        >
+          {cfg.emoji} SE VENDESSE TUDO
+        </Text>
+        <Text style={{ color: cfg.cor, fontSize: 26, fontWeight: "800" }}>
+          {formatarValor(Math.abs(saldoLiquido))}
+        </Text>
+        <Text
+          style={{ color: "rgba(255,255,255,0.5)", fontSize: 13, marginTop: 6 }}
+        >
+          {cfg.texto} {formatarValor(Math.abs(saldoLiquido))} após quitar todas
+          as dívidas.
+        </Text>
+      </View>
+
+      <View style={[styles.transacoesCard, { marginBottom: 20 }]}>
+        <View style={styles.transacoesCardHeader}>
+          <Text style={styles.transacoesCardTitle}>Meus patrimônios</Text>
+        </View>
+        {carregando ? (
+          <View style={styles.transacoesCardVazio}>
+            <ActivityIndicator size="small" color="#3ac97e" />
+          </View>
+        ) : patrimonios.length === 0 ? (
+          <View style={styles.transacoesCardVazio}>
+            <Text style={styles.transacoesCardVazioText}>
+              Nenhum item cadastrado ainda
+            </Text>
+          </View>
+        ) : (
+          patrimonios.map((p, i) => (
+            <View
+              key={p.id}
+              style={[
+                styles.transacoesCardItem,
+                i < patrimonios.length - 1 && styles.transacoesCardItemBorder,
+              ]}
+            >
+              <View style={styles.transacoesCardIconeCredito}>
+                <Text style={{ fontSize: 16 }}>🏠</Text>
+              </View>
+              <View style={styles.transacoesCardInfo}>
+                <Text style={styles.transacoesCardDescricao}>{p.nome}</Text>
+                <Text style={styles.transacoesCardMeta}>
+                  {formatarData(p.criado_em)}
+                </Text>
+              </View>
+              <Text
+                style={[styles.transacoesCardValorCredito, { marginRight: 12 }]}
+              >
+                {formatarValor(p.valor)}
+              </Text>
+              <TouchableOpacity onPress={() => removerPatrimonio(p.id)}>
+                <Text style={{ color: "#e85555", fontSize: 18 }}>x</Text>
+              </TouchableOpacity>
+            </View>
+          ))
+        )}
+      </View>
+
+      {loans.length > 0 && (
+        <View style={[styles.transacoesCard, { marginBottom: 20 }]}>
+          <View style={styles.transacoesCardHeader}>
+            <Text style={styles.transacoesCardTitle}>
+              Empréstimos e Financiamentos
+            </Text>
+          </View>
+          {loans.map((l, i) => (
+            <View
+              key={l.id}
+              style={[
+                styles.transacoesCardItem,
+                i < loans.length - 1 && styles.transacoesCardItemBorder,
+              ]}
+            >
+              <View style={styles.transacoesCardIconeDebito}>
+                <Text style={{ fontSize: 14 }}>📋</Text>
+              </View>
+              <View style={styles.transacoesCardInfo}>
+                <Text style={styles.transacoesCardDescricao}>{l.nome}</Text>
+                {l.parcelas && (
+                  <Text style={styles.transacoesCardMeta}>
+                    Parcelas: {l.parcelas}
+                  </Text>
+                )}
+              </View>
+              <Text style={styles.transacoesCardValorDebito}>
+                -{formatarValor(l.saldo_devedor)}
+              </Text>
+            </View>
+          ))}
+        </View>
+      )}
+
+      {contasCredito.filter((c) => c.saldo < 0).length > 0 && (
+        <View style={styles.transacoesCard}>
+          <View style={styles.transacoesCardHeader}>
+            <Text style={styles.transacoesCardTitle}>Cartão de Crédito</Text>
+          </View>
+          {contasCredito
+            .filter((c) => c.saldo < 0)
+            .map((c, i) => (
+              <View
+                key={c.id}
+                style={[
+                  styles.transacoesCardItem,
+                  i < contasCredito.length - 1 &&
+                    styles.transacoesCardItemBorder,
+                ]}
+              >
+                <View style={styles.transacoesCardIconeDebito}>
+                  <Text style={{ fontSize: 14 }}>💳</Text>
+                </View>
+                <View style={styles.transacoesCardInfo}>
+                  <Text style={styles.transacoesCardDescricao}>{c.nome}</Text>
+                  {c.numero && (
+                    <Text style={styles.transacoesCardMeta}>
+                      Final {c.numero}
+                    </Text>
+                  )}
+                </View>
+                <Text style={styles.transacoesCardValorDebito}>
+                  -{formatarValor(Math.abs(c.saldo))}
+                </Text>
+              </View>
+            ))}
+        </View>
+      )}
+    </ScrollView>
   );
 }
 
@@ -445,25 +1158,58 @@ export function Menu({ navigation, activeRoute = "Dashboard", children }) {
   const [telaAtiva, setTelaAtiva] = useState("Dashboard");
 
   const {
-    saldoTotal, salario, salvarSalario, transacoes, carregando, nomeUsuario,
-    dadosGrafico, gastosPorCategoria, totalReceitas, totalDespesas,
+    saldoTotal,
+    salario,
+    salvarSalario,
+    transacoes,
+    carregando,
+    nomeUsuario,
+    dadosGrafico,
+    gastosPorCategoria,
+    totalReceitas,
+    totalDespesas,
   } = useFinancas();
 
   function renderConteudo() {
     if (children) return children;
     switch (telaAtiva) {
       case "Extrato":
-        return <ExtratoContent styles={styles} transacoes={transacoes} carregando={carregando} totalReceitas={totalReceitas} totalDespesas={totalDespesas} />;
+        return (
+          <ExtratoContent
+            styles={styles}
+            transacoes={transacoes}
+            carregando={carregando}
+            totalReceitas={totalReceitas}
+            totalDespesas={totalDespesas}
+          />
+        );
+      case "Patrimonio":
+        return <PatrimonioContent styles={styles} />;
       case "Perfil":
-        return <PerfilContent styles={styles} nomeUsuario={nomeUsuario} saldoTotal={saldoTotal} totalReceitas={totalReceitas} totalDespesas={totalDespesas} transacoes={transacoes} navigation={navigation} />;
-      case "Relatorios":
-        return <RelatoriosContent styles={styles} />;
+        return (
+          <PerfilContent
+            styles={styles}
+            nomeUsuario={nomeUsuario}
+            saldoTotal={saldoTotal}
+            totalReceitas={totalReceitas}
+            totalDespesas={totalDespesas}
+            transacoes={transacoes}
+            navigation={navigation}
+          />
+        );
       default:
         return (
           <DashboardContent
-            styles={styles} saldoTotal={saldoTotal} salario={salario} salvarSalario={salvarSalario}
-            transacoes={transacoes} carregando={carregando} nomeUsuario={nomeUsuario}
-            dadosGrafico={dadosGrafico} gastosPorCategoria={gastosPorCategoria} totalDespesas={totalDespesas}
+            styles={styles}
+            saldoTotal={saldoTotal}
+            salario={salario}
+            salvarSalario={salvarSalario}
+            transacoes={transacoes}
+            carregando={carregando}
+            nomeUsuario={nomeUsuario}
+            dadosGrafico={dadosGrafico}
+            gastosPorCategoria={gastosPorCategoria}
+            totalDespesas={totalDespesas}
           />
         );
     }
@@ -476,28 +1222,49 @@ export function Menu({ navigation, activeRoute = "Dashboard", children }) {
       <View style={styles.desktopRoot}>
         <View style={styles.sidebar}>
           <View style={styles.sidebarLogo}>
-            <Text style={styles.logoText}>Money<Text style={styles.logoTrack}>Track</Text></Text>
+            <Text style={styles.logoText}>
+              Money<Text style={styles.logoTrack}>Track</Text>
+            </Text>
           </View>
           <View style={styles.sidebarGreeting}>
             <View style={styles.greetingAvatar}>
-              <Text style={styles.greetingAvatarText}>{nomeUsuario ? nomeUsuario[0].toUpperCase() : "?"}</Text>
+              <Text style={styles.greetingAvatarText}>
+                {nomeUsuario ? nomeUsuario[0].toUpperCase() : "?"}
+              </Text>
             </View>
             <View>
-              <Text style={styles.greetingName}>{primeiroNome(nomeUsuario)}</Text>
+              <Text style={styles.greetingName}>
+                {primeiroNome(nomeUsuario)}
+              </Text>
               <Text style={styles.greetingPlan}>{telaAtiva}</Text>
             </View>
           </View>
           <View style={styles.sidebarNav}>
-            {NAV_ITEMS.map(item => {
+            {NAV_ITEMS.map((item) => {
               const isActive = telaAtiva === item.route;
               return (
-                <TouchableOpacity key={item.route} style={[styles.navItem, isActive && styles.navItemActive]} onPress={() => setTelaAtiva(item.route)}>
-                  <Text style={[styles.navLabel, isActive && styles.navLabelActive]}>{item.label}</Text>
+                <TouchableOpacity
+                  key={item.route}
+                  style={[styles.navItem, isActive && styles.navItemActive]}
+                  onPress={() => setTelaAtiva(item.route)}
+                >
+                  <Text
+                    style={[styles.navLabel, isActive && styles.navLabelActive]}
+                  >
+                    {item.label}
+                  </Text>
                 </TouchableOpacity>
               );
             })}
           </View>
-          <TouchableOpacity style={styles.sidebarSignOut} onPress={async () => { await AsyncStorage.removeItem("usuarioId"); await AsyncStorage.removeItem("token"); navigation.navigate("Login"); }}>
+          <TouchableOpacity
+            style={styles.sidebarSignOut}
+            onPress={async () => {
+              await AsyncStorage.removeItem("usuarioId");
+              await AsyncStorage.removeItem("token");
+              navigation.navigate("Login");
+            }}
+          >
             <Text style={styles.signOutText}>Sair</Text>
           </TouchableOpacity>
         </View>
@@ -510,11 +1277,22 @@ export function Menu({ navigation, activeRoute = "Dashboard", children }) {
     <View style={styles.mobileRoot}>
       <View style={styles.mobileContent}>{renderConteudo()}</View>
       <View style={styles.bottomNav}>
-        {MOBILE_ITEMS.map(item => {
+        {MOBILE_ITEMS.map((item) => {
           const isActive = telaAtiva === item.route;
           return (
-            <TouchableOpacity key={item.route} style={styles.bottomNavItem} onPress={() => setTelaAtiva(item.route)}>
-              <Text style={[styles.bottomNavLabel, isActive && styles.bottomNavLabelActive]}>{item.label}</Text>
+            <TouchableOpacity
+              key={item.route}
+              style={styles.bottomNavItem}
+              onPress={() => setTelaAtiva(item.route)}
+            >
+              <Text
+                style={[
+                  styles.bottomNavLabel,
+                  isActive && styles.bottomNavLabelActive,
+                ]}
+              >
+                {item.label}
+              </Text>
             </TouchableOpacity>
           );
         })}

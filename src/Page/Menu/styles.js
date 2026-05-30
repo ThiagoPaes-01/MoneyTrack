@@ -1,4 +1,3 @@
-// screens/Menu/styles.js
 import { StyleSheet, useWindowDimensions } from "react-native";
 import { color } from "../../Global/color";
 
@@ -9,7 +8,6 @@ export function useMenuStyles() {
   const isDesktop = width >= 768;
 
   return StyleSheet.create({
-
     // ════════════════════════════════════════
     // DESKTOP
     // ════════════════════════════════════════
@@ -284,7 +282,12 @@ export function useMenuStyles() {
 
     dashboardGreeting: { marginBottom: 24 },
     dashboardGreetingSubtitle: { color: "rgba(255,255,255,0.4)", fontSize: 14 },
-    dashboardGreetingTitle: { color: "#fff", fontSize: 26, fontWeight: "800", marginTop: 2 },
+    dashboardGreetingTitle: {
+      color: "#fff",
+      fontSize: 26,
+      fontWeight: "800",
+      marginTop: 2,
+    },
 
     cardsRow: {
       flexDirection: "row",
@@ -298,7 +301,12 @@ export function useMenuStyles() {
       borderRadius: 16,
       padding: 20,
     },
-    cardSaldoLabel: { color: "rgba(0,0,0,0.55)", fontSize: 12, fontWeight: "600", marginBottom: 8 },
+    cardSaldoLabel: {
+      color: "rgba(0,0,0,0.55)",
+      fontSize: 12,
+      fontWeight: "600",
+      marginBottom: 8,
+    },
     cardSaldoValor: { color: "#0d1321", fontSize: 22, fontWeight: "800" },
 
     cardSalario: {
@@ -309,10 +317,27 @@ export function useMenuStyles() {
       borderWidth: 1,
       borderColor: "rgba(58,201,126,0.15)",
     },
-    cardSalarioHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
-    cardSalarioLabel: { color: "rgba(255,255,255,0.4)", fontSize: 12, fontWeight: "600" },
-    cardSalarioValor: { color: "#fff", fontSize: 22, fontWeight: "800", marginTop: 8 },
-    cardSalarioHint: { color: "rgba(255,255,255,0.25)", fontSize: 11, marginTop: 12 },
+    cardSalarioHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+    },
+    cardSalarioLabel: {
+      color: "rgba(255,255,255,0.4)",
+      fontSize: 12,
+      fontWeight: "600",
+    },
+    cardSalarioValor: {
+      color: "#fff",
+      fontSize: 22,
+      fontWeight: "800",
+      marginTop: 8,
+    },
+    cardSalarioHint: {
+      color: "rgba(255,255,255,0.25)",
+      fontSize: 11,
+      marginTop: 12,
+    },
 
     cardReceitas: {
       flex: 1,
@@ -322,7 +347,12 @@ export function useMenuStyles() {
       borderWidth: 1,
       borderColor: "rgba(58,201,126,0.15)",
     },
-    cardReceitasLabel: { color: "rgba(255,255,255,0.4)", fontSize: 12, fontWeight: "600", marginBottom: 8 },
+    cardReceitasLabel: {
+      color: "rgba(255,255,255,0.4)",
+      fontSize: 12,
+      fontWeight: "600",
+      marginBottom: 8,
+    },
     cardReceitasValor: { color: "#3ac97e", fontSize: 20, fontWeight: "800" },
 
     cardDespesas: {
@@ -333,7 +363,12 @@ export function useMenuStyles() {
       borderWidth: 1,
       borderColor: "rgba(232,85,85,0.15)",
     },
-    cardDespesasLabel: { color: "rgba(255,255,255,0.4)", fontSize: 12, fontWeight: "600", marginBottom: 8 },
+    cardDespesasLabel: {
+      color: "rgba(255,255,255,0.4)",
+      fontSize: 12,
+      fontWeight: "600",
+      marginBottom: 8,
+    },
     cardDespesasValor: { color: "#e85555", fontSize: 20, fontWeight: "800" },
 
     transacoesCard: {
@@ -362,42 +397,94 @@ export function useMenuStyles() {
       borderBottomColor: "rgba(255,255,255,0.04)",
     },
     transacoesCardIconeDebito: {
-      width: 38, height: 38, borderRadius: 12,
-      alignItems: "center", justifyContent: "center",
-      backgroundColor: "rgba(232,85,85,0.12)", marginRight: 14,
+      width: 38,
+      height: 38,
+      borderRadius: 12,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "rgba(232,85,85,0.12)",
+      marginRight: 14,
     },
     transacoesCardIconeCredito: {
-      width: 38, height: 38, borderRadius: 12,
-      alignItems: "center", justifyContent: "center",
-      backgroundColor: "rgba(58,201,126,0.12)", marginRight: 14,
+      width: 38,
+      height: 38,
+      borderRadius: 12,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: "rgba(58,201,126,0.12)",
+      marginRight: 14,
     },
     transacoesCardInfo: { flex: 1 },
     transacoesCardDescricao: { color: "#fff", fontSize: 14, fontWeight: "600" },
-    transacoesCardMeta: { color: "rgba(255,255,255,0.35)", fontSize: 12, marginTop: 2 },
-    transacoesCardValorDebito: { fontSize: 15, fontWeight: "700", color: "#e85555" },
-    transacoesCardValorCredito: { fontSize: 15, fontWeight: "700", color: "#3ac97e" },
+    transacoesCardMeta: {
+      color: "rgba(255,255,255,0.35)",
+      fontSize: 12,
+      marginTop: 2,
+    },
+    transacoesCardValorDebito: {
+      fontSize: 15,
+      fontWeight: "700",
+      color: "#e85555",
+    },
+    transacoesCardValorCredito: {
+      fontSize: 15,
+      fontWeight: "700",
+      color: "#3ac97e",
+    },
 
     // ─── Modal ───────────────────────────────
     modalOverlay: {
-      flex: 1, backgroundColor: "rgba(0,0,0,0.6)",
-      justifyContent: "center", alignItems: "center", padding: 24,
+      flex: 1,
+      backgroundColor: "rgba(0,0,0,0.6)",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 24,
     },
     modalBox: {
-      backgroundColor: "#1a2235", borderRadius: 16, padding: 24,
-      width: "100%", maxWidth: 360, borderWidth: 1, borderColor: "rgba(58,201,126,0.2)",
+      backgroundColor: "#1a2235",
+      borderRadius: 16,
+      padding: 24,
+      width: "100%",
+      maxWidth: 360,
+      borderWidth: 1,
+      borderColor: "rgba(58,201,126,0.2)",
     },
-    modalHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 20 },
+    modalHeader: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      marginBottom: 20,
+    },
     modalTitle: { color: "#fff", fontSize: 18, fontWeight: "700" },
-    modalSubtitle: { color: "rgba(255,255,255,0.5)", fontSize: 13, marginBottom: 12 },
+    modalSubtitle: {
+      color: "rgba(255,255,255,0.5)",
+      fontSize: 13,
+      marginBottom: 12,
+    },
     modalInputRow: {
-      flexDirection: "row", alignItems: "center",
-      backgroundColor: "rgba(255,255,255,0.06)", borderRadius: 10,
-      borderWidth: 1, borderColor: "rgba(58,201,126,0.3)",
-      paddingHorizontal: 14, marginBottom: 20,
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: "rgba(255,255,255,0.06)",
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: "rgba(58,201,126,0.3)",
+      paddingHorizontal: 14,
+      marginBottom: 20,
     },
     modalInputPrefix: { color: "#3ac97e", fontSize: 16, marginRight: 8 },
-    modalInput: { flex: 1, color: "#fff", fontSize: 20, fontWeight: "600", paddingVertical: 14 },
-    modalButton: { backgroundColor: "#3ac97e", borderRadius: 10, paddingVertical: 14, alignItems: "center" },
+    modalInput: {
+      flex: 1,
+      color: "#fff",
+      fontSize: 20,
+      fontWeight: "600",
+      paddingVertical: 14,
+    },
+    modalButton: {
+      backgroundColor: "#3ac97e",
+      borderRadius: 10,
+      paddingVertical: 14,
+      alignItems: "center",
+    },
     modalButtonText: { color: "#0d1321", fontSize: 15, fontWeight: "700" },
 
     // ════════════════════════════════════════
@@ -449,10 +536,26 @@ export function useMenuStyles() {
       marginBottom: 8,
       letterSpacing: 1,
     },
-    extratoCardValorVerde: { color: "#3ac97e", fontSize: 22, fontWeight: "800" },
-    extratoCardValorVermelho: { color: "#e85555", fontSize: 22, fontWeight: "800" },
-    extratoCardValorAmarelo: { color: "#f59e0b", fontSize: 22, fontWeight: "800" },
-    extratoCardSub: { color: "rgba(255,255,255,0.3)", fontSize: 12, marginTop: 6 },
+    extratoCardValorVerde: {
+      color: "#3ac97e",
+      fontSize: 22,
+      fontWeight: "800",
+    },
+    extratoCardValorVermelho: {
+      color: "#e85555",
+      fontSize: 22,
+      fontWeight: "800",
+    },
+    extratoCardValorAmarelo: {
+      color: "#f59e0b",
+      fontSize: 22,
+      fontWeight: "800",
+    },
+    extratoCardSub: {
+      color: "rgba(255,255,255,0.3)",
+      fontSize: 12,
+      marginTop: 6,
+    },
 
     filtroBtn: {
       paddingHorizontal: 16,
@@ -585,6 +688,21 @@ export function useMenuStyles() {
       color: "#e85555",
       fontSize: 15,
       fontWeight: "700",
+    },
+
+    // ════════════════════════════════════════
+    // PATRIMÔNIO
+    // ════════════════════════════════════════
+
+    patrimonioInput: {
+      backgroundColor: "rgba(255,255,255,0.06)",
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.1)",
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      color: "#fff",
+      fontSize: 15,
     },
   });
 }
