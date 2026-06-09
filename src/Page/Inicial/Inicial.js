@@ -34,7 +34,7 @@ function MockupImage({ isDesktop }) {
         src={fundoMenuSrc}
         alt="MoneyTrack app mockup"
         style={{
-          width: isDesktop ? 560 : "85%",
+          width: isDesktop ? 860 : "85%",
           height: "auto",
           objectFit: "contain",
           mixBlendMode: "multiply",
@@ -43,7 +43,7 @@ function MockupImage({ isDesktop }) {
       />
     );
   }
-  // No mobile usa Image normal (fundo já é escuro, sem problema)
+  // No mobile
   return (
     <Image
       source={FundoMenu}

@@ -87,7 +87,7 @@ export function usePatrimonio() {
 
   // Status: azul (sobra), zero (empata), vermelho (falta)
   const status =
-    saldoLiquido > 100 ? "azul" : saldoLiquido >= -100 ? "zero" : "vermelho";
+    saldoLiquido > 1 ? "azul" : saldoLiquido >= 0 ? "zero" : "vermelho";
 
   return {
     patrimonios,

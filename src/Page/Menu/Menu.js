@@ -18,17 +18,19 @@ import { usePatrimonio } from "../../hooks/usePatrimonio";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const NAV_ITEMS = [
-  { label: "Dashboard", route: "Dashboard" },
-  { label: "Extrato", route: "Extrato" },
+  { label: "Dashboard",  route: "Dashboard"  },
+  { label: "Extrato",    route: "Extrato"    },
+  { label: "Relatórios", route: "Relatorios" },
   { label: "Patrimônio", route: "Patrimonio" },
-  { label: "Perfil", route: "Perfil" },
+  { label: "Perfil",     route: "Perfil"     },
 ];
 
 const MOBILE_ITEMS = [
-  { label: "Início", route: "Dashboard" },
-  { label: "Extrato", route: "Extrato" },
+  { label: "Início",     route: "Dashboard"  },
+  { label: "Extrato",    route: "Extrato"    },
+  { label: "Relatórios", route: "Relatorios" },
   { label: "Patrimônio", route: "Patrimonio" },
-  { label: "Perfil", route: "Perfil" },
+  { label: "Perfil",     route: "Perfil"     },
 ];
 
 function formatarValor(valor) {
@@ -49,7 +51,7 @@ function primeiroNome(nome) {
   return nome.split(" ")[0];
 }
 
-// ── Gráfico de Colunas ────────────────────────────────────────────
+// ── Gráfico de Colunas
 function GraficoColunas({ dados }) {
   if (!dados || dados.length === 0)
     return (
@@ -156,7 +158,7 @@ function GraficoColunas({ dados }) {
   );
 }
 
-// ── Gastos por Categoria ──────────────────────────────────────────
+// ── Gastos por Categoria
 function GraficoCategoria({ gastos }) {
   if (!gastos || gastos.length === 0)
     return (
@@ -227,7 +229,7 @@ function GraficoCategoria({ gastos }) {
   );
 }
 
-// ── Modal Salário ─────────────────────────────────────────────────
+// ── Modal Salário
 function SalarioModal({ visivel, onFechar, onSalvar, styles }) {
   const [valor, setValor] = useState("");
 
@@ -283,7 +285,7 @@ function SalarioModal({ visivel, onFechar, onSalvar, styles }) {
   );
 }
 
-// ── Dashboard ─────────────────────────────────────────────────────
+// ── Dashboard
 function DashboardContent({
   styles,
   saldoTotal,
@@ -294,6 +296,7 @@ function DashboardContent({
   nomeUsuario,
   dadosGrafico,
   gastosPorCategoria,
+  totalReceitas,
   totalDespesas,
 }) {
   const [modalVisivel, setModalVisivel] = useState(false);
@@ -469,19 +472,20 @@ function DashboardContent({
   );
 }
 
-// ── Extrato ───────────────────────────────────────────────────────
+// ── Extrato
 function ExtratoContent({
   styles,
   transacoes,
   carregando,
   totalReceitas,
   totalDespesas,
+  saldoTotal,
+  salario,
 }) {
   const [filtro, setFiltro] = useState("Todos");
   const { width } = useWindowDimensions();
   const isDesktop = width >= 768;
 
-  // Categorias únicas para filtros
   const categorias = [
     "Todos",
     "Receitas",
@@ -496,7 +500,8 @@ function ExtratoContent({
     return t.categoria === filtro;
   });
 
-  const saldoPeriodo = totalReceitas - totalDespesas;
+  // saldo REAL da conta
+  const saldoPeriodo = saldoTotal;
 
   return (
     <ScrollView
@@ -504,44 +509,12 @@ function ExtratoContent({
       contentContainerStyle={{ padding: 24, paddingBottom: 40 }}
       showsVerticalScrollIndicator={false}
     >
-      {/* Título */}
       <Text style={styles.extratoTitulo}>Extrato</Text>
 
-      {/* Cards resumo — mesmos valores do Dashboard (mês atual) */}
       <View style={[styles.cardsRow, { marginBottom: 24 }]}>
-        <View style={styles.extratoCardReceitas}>
-          <Text style={styles.extratoCardLabel}>RECEITAS (MÊS)</Text>
-          {carregando ? (
-            <ActivityIndicator size="small" color="#3ac97e" />
-          ) : (
-            <>
-              <Text style={styles.extratoCardValorVerde}>
-                {formatarValor(totalReceitas)}
-              </Text>
-              <Text style={styles.extratoCardSub}>
-                {transacoes.filter((t) => t.tipo === "CREDIT").length}{" "}
-                transações
-              </Text>
-            </>
-          )}
-        </View>
-        <View style={styles.extratoCardDespesas}>
-          <Text style={styles.extratoCardLabel}>DESPESAS (MÊS)</Text>
-          {carregando ? (
-            <ActivityIndicator size="small" color="#e85555" />
-          ) : (
-            <>
-              <Text style={styles.extratoCardValorVermelho}>
-                {formatarValor(totalDespesas)}
-              </Text>
-              <Text style={styles.extratoCardSub}>
-                {transacoes.filter((t) => t.tipo === "DEBIT").length} transações
-              </Text>
-            </>
-          )}
-        </View>
         <View style={styles.extratoCardSaldo}>
-          <Text style={styles.extratoCardLabel}>SALDO DO PERÍODO</Text>
+          <Text style={styles.extratoCardLabel}>SALDO ATUAL</Text>
+
           {carregando ? (
             <ActivityIndicator size="small" color="#f59e0b" />
           ) : (
@@ -549,21 +522,63 @@ function ExtratoContent({
               <Text style={styles.extratoCardValorAmarelo}>
                 {formatarValor(saldoPeriodo)}
               </Text>
+
               <Text style={styles.extratoCardSub}>
                 {saldoPeriodo >= 0 ? "✓ positivo" : "⚠ negativo"}
               </Text>
             </>
           )}
         </View>
+
+        <View style={styles.extratoCardReceitas}>
+          <Text style={styles.extratoCardLabel}>RECEITAS (MÊS)</Text>
+
+          {carregando ? (
+            <ActivityIndicator size="small" color="#3ac97e" />
+          ) : (
+            <>
+              <Text style={styles.extratoCardValorVerde}>
+                {formatarValor(salario || 0)}
+              </Text>
+
+              <Text style={styles.extratoCardSub}>
+                Salário mensal
+              </Text>
+            </>
+          )}
+        </View>
+
+        <View style={styles.extratoCardDespesas}>
+          <Text style={styles.extratoCardLabel}>DESPESAS (MÊS)</Text>
+
+          {carregando ? (
+            <ActivityIndicator size="small" color="#e85555" />
+          ) : (
+            <>
+              <Text style={styles.extratoCardValorVermelho}>
+                {formatarValor(totalDespesas)}
+              </Text>
+
+              <Text style={styles.extratoCardSub}>
+                {transacoes.filter((t) => t.tipo === "DEBIT").length} transações
+              </Text>
+            </>
+          )}
+        </View>
       </View>
 
-      {/* Filtros */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         style={{ marginBottom: 20 }}
       >
-        <View style={{ flexDirection: "row", gap: 8, paddingVertical: 4 }}>
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 8,
+            paddingVertical: 4,
+          }}
+        >
           {categorias.map((cat) => (
             <TouchableOpacity
               key={cat}
@@ -586,24 +601,28 @@ function ExtratoContent({
         </View>
       </ScrollView>
 
-      {/* Lista de transações */}
       <View style={styles.transacoesCard}>
-        {/* Header da tabela — só desktop */}
         {isDesktop && (
           <View style={[styles.extratoTableHeader]}>
             <Text style={[styles.extratoTableHeaderText, { flex: 2 }]}>
               DESCRIÇÃO
             </Text>
+
             <Text style={[styles.extratoTableHeaderText, { flex: 1 }]}>
               CATEGORIA
             </Text>
+
             <Text style={[styles.extratoTableHeaderText, { flex: 1 }]}>
               DATA
             </Text>
+
             <Text
               style={[
                 styles.extratoTableHeaderText,
-                { flex: 1, textAlign: "right" },
+                {
+                  flex: 1,
+                  textAlign: "right",
+                },
               ]}
             >
               VALOR
@@ -631,7 +650,6 @@ function ExtratoContent({
                   styles.transacoesCardItemBorder,
               ]}
             >
-              {/* Ícone */}
               <View
                 style={
                   t.tipo === "DEBIT"
@@ -649,13 +667,18 @@ function ExtratoContent({
                 </Text>
               </View>
 
-              {/* Descrição */}
               <View
-                style={[styles.transacoesCardInfo, { flex: isDesktop ? 2 : 1 }]}
+                style={[
+                  styles.transacoesCardInfo,
+                  {
+                    flex: isDesktop ? 2 : 1,
+                  },
+                ]}
               >
                 <Text style={styles.transacoesCardDescricao} numberOfLines={1}>
                   {t.descricao || "—"}
                 </Text>
+
                 {!isDesktop && (
                   <Text style={styles.transacoesCardMeta}>
                     {t.categoria || ""}
@@ -665,7 +688,6 @@ function ExtratoContent({
                 )}
               </View>
 
-              {/* Categoria — só desktop */}
               {isDesktop && (
                 <View style={{ flex: 1 }}>
                   {t.categoria ? (
@@ -681,7 +703,9 @@ function ExtratoContent({
                       <Text
                         style={[
                           styles.categoriaTagText,
-                          { color: getCategoriaColor(t.categoria) },
+                          {
+                            color: getCategoriaColor(t.categoria),
+                          },
                         ]}
                       >
                         {t.categoria}
@@ -689,7 +713,10 @@ function ExtratoContent({
                     </View>
                   ) : (
                     <Text
-                      style={{ color: "rgba(255,255,255,0.2)", fontSize: 12 }}
+                      style={{
+                        color: "rgba(255,255,255,0.2)",
+                        fontSize: 12,
+                      }}
                     >
                       —
                     </Text>
@@ -697,7 +724,6 @@ function ExtratoContent({
                 </View>
               )}
 
-              {/* Data — só desktop */}
               {isDesktop && (
                 <Text
                   style={{
@@ -710,13 +736,15 @@ function ExtratoContent({
                 </Text>
               )}
 
-              {/* Valor */}
               <Text
                 style={[
                   t.tipo === "DEBIT"
                     ? styles.transacoesCardValorDebito
                     : styles.transacoesCardValorCredito,
-                  { minWidth: 90, textAlign: "right" },
+                  {
+                    minWidth: 90,
+                    textAlign: "right",
+                  },
                 ]}
               >
                 {t.tipo === "DEBIT" ? "-" : "+"}
@@ -729,7 +757,6 @@ function ExtratoContent({
     </ScrollView>
   );
 }
-
 function getCategoriaColor(categoria) {
   const cores = {
     Alimentação: "#f59e0b",
@@ -750,7 +777,7 @@ function getCategoriaColor(categoria) {
   return cores[categoria] || "#6b7280";
 }
 
-// ── Perfil ────────────────────────────────────────────────────────
+// ── Perfil
 function PerfilContent({
   styles,
   nomeUsuario,
@@ -822,42 +849,320 @@ function PerfilContent({
   );
 }
 
-// ── Relatórios (placeholder) ──────────────────────────────────────
-function RelatoriosContent({ styles }) {
+// ── Relatórios ───────────────────────────────────────────────────
+function RelatoriosContent({ styles, transacoes, dadosGrafico, gastosPorCategoria, totalReceitas, totalDespesas, carregando, saldoTotal }) {
+  const { width } = useWindowDimensions();
+
+  const TRADUCOES = {
+    "Salary": "Salário", "Housing": "Moradia", "Electricity": "Energia Elétrica",
+    "Music streaming": "Streaming de Música", "Video streaming": "Streaming de Vídeo",
+    "Gyms and fitness centers": "Academia", "Telecommunications": "Telecomunicações",
+    "Transfer - Bank Slip": "Pagamento de Boleto", "Food and beverage": "Alimentação",
+    "Transport": "Transporte", "Health": "Saúde", "Entertainment": "Entretenimento",
+    "Shopping": "Compras", "Credit card payment": "Pagamento de Fatura", "Clothing": "Vestuário",
+  };
+  function traduzir(cat) { return TRADUCOES[cat] || cat || "—"; }
+  function fmtValor(v) {
+    if (v === null || v === undefined) return "—";
+    return Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+  }
+
+  // Seletor de mês — por padrão mês atual
+  const agora = new Date();
+  const [mesSelecionado, setMesSelecionado] = useState(agora.getMonth());
+  const [anoSelecionado, setAnoSelecionado] = useState(agora.getFullYear());
+
+  // Gera lista dos últimos 12 meses para o seletor
+  const mesesDisponiveis = [];
+  for (let i = 11; i >= 0; i--) {
+    const d = new Date(agora.getFullYear(), agora.getMonth() - i, 1);
+    mesesDisponiveis.push({
+      mes: d.getMonth(),
+      ano: d.getFullYear(),
+      label: d.toLocaleDateString("pt-BR", { month: "long", year: "numeric" }),
+      labelCurto: d.toLocaleDateString("pt-BR", { month: "short" }),
+    });
+  }
+
+  // Filtra transações do mês selecionado
+  const txMesSelecionado = transacoes.filter(t => {
+    if (!t.data) return false;
+    const d = new Date(t.data + "T00:00:00");
+    return d.getMonth() === mesSelecionado && d.getFullYear() === anoSelecionado;
+  });
+
+  const CATEGORIAS_IGNORAR = ["credit card payment", "pagamento fatura", "pagamento cartao"];
+
+  const receitasMes = txMesSelecionado
+    .filter(t => (t.tipo||"").toUpperCase() === "CREDIT" && !CATEGORIAS_IGNORAR.some(c => (t.categoria||"").toLowerCase().includes(c)))
+    .reduce((acc, t) => acc + Math.abs(Number(t.valor||0)), 0);
+
+  const despesasMes = txMesSelecionado
+    .filter(t => (t.tipo||"").toUpperCase() === "DEBIT")
+    .reduce((acc, t) => acc + Math.abs(Number(t.valor||0)), 0);
+
+  const saldoPeriodo = receitasMes - despesasMes;
+
+  // Gastos por categoria do mês selecionado
+  const catMap = {};
+  const cores = ["#3ac97e","#f59e0b","#3b82f6","#8b5cf6","#e85555","#06b6d4"];
+  txMesSelecionado.filter(t => (t.tipo||"").toUpperCase() === "DEBIT" && t.categoria).forEach(t => {
+    catMap[t.categoria] = (catMap[t.categoria] || 0) + Math.abs(Number(t.valor||0));
+  });
+  const totalCat = Object.values(catMap).reduce((a,b) => a+b, 0);
+  const gastosCat = Object.entries(catMap)
+    .sort((a,b) => b[1]-a[1]).slice(0,5)
+    .map(([nome, valor], i) => ({ nome, valor, percentual: totalCat > 0 ? Math.round((valor/totalCat)*100) : 0, cor: cores[i%cores.length] }));
+
+  // Movimentações por categoria do mês selecionado
+  const resumoCategorias = {};
+  txMesSelecionado.forEach(t => {
+    if (!t.categoria) return;
+    if (!resumoCategorias[t.categoria]) resumoCategorias[t.categoria] = { receitas: 0, despesas: 0 };
+    const val = Math.abs(Number(t.valor||0));
+    if ((t.tipo||"").toUpperCase() === "CREDIT") resumoCategorias[t.categoria].receitas += val;
+    else resumoCategorias[t.categoria].despesas += val;
+  });
+  const topCategorias = Object.entries(resumoCategorias)
+    .sort((a,b) => (b[1].receitas+b[1].despesas)-(a[1].receitas+a[1].despesas))
+    .slice(0, 8);
+
+  // Gráfico — 6 meses centrados no mês selecionado (3 antes, o próprio, 2 depois ou o que houver)
+  const graficoDados = [];
+  for (let i = -3; i <= 2; i++) {
+    const d = new Date(anoSelecionado, mesSelecionado + i, 1);
+    const m = d.getMonth();
+    const a = d.getFullYear();
+    const nomeMes = d.toLocaleDateString("pt-BR", { month: "short" });
+    const txMes = transacoes.filter(t => {
+      if (!t.data) return false;
+      const td = new Date(t.data + "T00:00:00");
+      return td.getMonth() === m && td.getFullYear() === a;
+    });
+    const IGNORAR = ["credit card payment", "pagamento fatura", "pagamento cartao"];
+    const r = txMes.filter(t => (t.tipo||"").toUpperCase() === "CREDIT" && !IGNORAR.some(c => (t.categoria||"").toLowerCase().includes(c)))
+      .reduce((acc, t) => acc + Math.abs(Number(t.valor||0)), 0);
+    const d2 = txMes.filter(t => (t.tipo||"").toUpperCase() === "DEBIT")
+      .reduce((acc, t) => acc + Math.abs(Number(t.valor||0)), 0);
+    graficoDados.push({ mes: nomeMes, receitas: r, despesas: d2, ativo: i === 0 });
+  }
+
+  const melhorMes = graficoDados.length > 0
+    ? graficoDados.reduce((best, m) => (m.receitas - m.despesas) > (best.receitas - best.despesas) ? m : best, graficoDados[0])
+    : null;
+
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 24,
-      }}
-    >
-      <Text style={{ fontSize: 40, marginBottom: 16 }}>📊</Text>
-      <Text
-        style={{
-          color: "#fff",
-          fontSize: 20,
-          fontWeight: "700",
-          marginBottom: 8,
-        }}
-      >
-        Em breve
-      </Text>
-      <Text
-        style={{
-          color: "rgba(255,255,255,0.4)",
-          fontSize: 14,
-          textAlign: "center",
-        }}
-      >
-        A tela de relatórios avançados está sendo desenvolvida.
-      </Text>
-    </View>
+    <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 24, paddingBottom: 40 }} showsVerticalScrollIndicator={false}>
+      {/* Título + Seletor de mês */}
+      <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+        <Text style={styles.extratoTitulo}>Relatórios</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ maxWidth: "60%" }}>
+          <View style={{ flexDirection: "row", gap: 8, paddingVertical: 4 }}>
+            {mesesDisponiveis.map((m, i) => {
+              const ativo = m.mes === mesSelecionado && m.ano === anoSelecionado;
+              return (
+                <TouchableOpacity
+                  key={i}
+                  onPress={() => { setMesSelecionado(m.mes); setAnoSelecionado(m.ano); }}
+                  style={[styles.filtroBtn, ativo && styles.filtroBtnAtivo]}
+                >
+                  <Text style={[styles.filtroBtnText, ativo && styles.filtroBtnTextAtivo]}>
+                    {m.labelCurto}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </ScrollView>
+      </View>
+
+      {/* Cards resumo */}
+      <View style={[styles.cardsRow, { marginBottom: 24 }]}>
+        <View style={styles.extratoCardSaldo}>
+          <Text style={styles.extratoCardLabel}>SALDO ATUAL</Text>
+          {carregando ? <ActivityIndicator size="small" color="#f59e0b" /> : (
+            <>
+              <Text style={[styles.extratoCardValorAmarelo, saldoTotal < 0 && { color: "#e85555" }]}>{fmtValor(saldoTotal)}</Text>
+              <Text style={styles.extratoCardSub}>{saldoTotal >= 0 ? "✓ positivo" : "⚠ negativo"}</Text>
+            </>
+          )}
+        </View>
+        <View style={styles.extratoCardReceitas}>
+          <Text style={styles.extratoCardLabel}>RECEITAS</Text>
+          {carregando ? <ActivityIndicator size="small" color="#3ac97e" /> : (
+            <>
+              <Text style={styles.extratoCardValorVerde}>{fmtValor(receitasMes)}</Text>
+              <Text style={styles.extratoCardSub}>{txMesSelecionado.filter(t => (t.tipo||"").toUpperCase()==="CREDIT").length} entradas</Text>
+            </>
+          )}
+        </View>
+        <View style={styles.extratoCardDespesas}>
+          <Text style={styles.extratoCardLabel}>DESPESAS</Text>
+          {carregando ? <ActivityIndicator size="small" color="#e85555" /> : (
+            <>
+              <Text style={styles.extratoCardValorVermelho}>{fmtValor(despesasMes)}</Text>
+              <Text style={styles.extratoCardSub}>{txMesSelecionado.filter(t => (t.tipo||"").toUpperCase()==="DEBIT").length} saídas</Text>
+            </>
+          )}
+        </View>
+      </View>
+
+      {/* Gráfico de colunas */}
+      <View style={[styles.transacoesCard, { padding: 18, marginBottom: 20 }]}>
+        <Text style={[styles.transacoesCardTitle, { marginBottom: 4 }]}>Receitas vs Despesas — 6 meses</Text>
+        {melhorMes && (
+          <Text style={{ color: "rgba(255,255,255,0.35)", fontSize: 12, marginBottom: 16 }}>
+            Melhor mês: {melhorMes.mes} (+{fmtValor(melhorMes.receitas - melhorMes.despesas)})
+          </Text>
+        )}
+        {carregando ? <ActivityIndicator size="small" color="#3ac97e" /> : (() => {
+          const max = Math.max(...graficoDados.flatMap(d => [d.receitas||0, d.despesas||0]), 1);
+          const altMax = 120;
+          return (
+            <View>
+              <View style={{ flexDirection: "row", alignItems: "flex-end", height: altMax + 70, gap: 4 }}>
+                {graficoDados.map((d, i) => {
+                  const hR = Math.max((d.receitas / max) * altMax, 3);
+                  const hD = Math.max((d.despesas / max) * altMax, 3);
+                  const saldo = d.receitas - d.despesas;
+                  return (
+                    <View key={i} style={{ flex: 1, alignItems: "center", justifyContent: "flex-end" }}>
+                      {/* Valor do saldo acima das barras */}
+                      <Text style={{
+                        color: d.ativo ? (saldo >= 0 ? "#3ac97e" : "#e85555") : "rgba(255,255,255,0.2)",
+                        fontSize: d.ativo ? 10 : 8,
+                        fontWeight: d.ativo ? "700" : "400",
+                        marginBottom: 4,
+                        textAlign: "center",
+                      }}>
+                        {saldo >= 0 ? "+" : ""}{(saldo/1000).toFixed(1)}k
+                      </Text>
+                      {/* Barras */}
+                      <View style={{ flexDirection: "row", alignItems: "flex-end", gap: 2, marginBottom: 6 }}>
+                        <View style={{
+                          width: d.ativo ? 14 : 10,
+                          height: hR,
+                          backgroundColor: d.ativo ? "#3ac97e" : "rgba(58,201,126,0.35)",
+                          borderRadius: 3,
+                          ...(d.ativo && { shadowColor: "#3ac97e", shadowOpacity: 0.6, shadowRadius: 6, elevation: 4 }),
+                        }} />
+                        <View style={{
+                          width: d.ativo ? 14 : 10,
+                          height: hD,
+                          backgroundColor: d.ativo ? "#e85555" : "rgba(232,85,85,0.35)",
+                          borderRadius: 3,
+                          ...(d.ativo && { shadowColor: "#e85555", shadowOpacity: 0.6, shadowRadius: 6, elevation: 4 }),
+                        }} />
+                      </View>
+                      {/* Label do mês */}
+                      <Text style={{
+                        color: d.ativo ? "#ffffff" : "rgba(255,255,255,0.3)",
+                        fontSize: d.ativo ? 11 : 10,
+                        fontWeight: d.ativo ? "700" : "400",
+                        textAlign: "center",
+                      }}>
+                        {d.mes}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
+              <View style={{ flexDirection: "row", gap: 16, marginTop: 8 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+                  <View style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: "#3ac97e" }} />
+                  <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>Receitas</Text>
+                </View>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
+                  <View style={{ width: 10, height: 10, borderRadius: 2, backgroundColor: "#e85555" }} />
+                  <Text style={{ color: "rgba(255,255,255,0.4)", fontSize: 11 }}>Despesas</Text>
+                </View>
+              </View>
+            </View>
+          );
+        })()}
+      </View>
+
+      {/* Gastos por categoria */}
+      <View style={[styles.transacoesCard, { padding: 18, marginBottom: 20 }]}>
+        <Text style={[styles.transacoesCardTitle, { marginBottom: 16 }]}>Gastos por categoria</Text>
+        {carregando ? <ActivityIndicator size="small" color="#3ac97e" /> : gastosCat.length === 0 ? (
+          <Text style={[styles.transacoesCardVazioText, { padding: 16 }]}>Sem dados de categorias</Text>
+        ) : (
+          <View style={{ gap: 12 }}>
+            {gastosCat.map((g, i) => (
+              <View key={i} style={{ gap: 6 }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                  <Text style={{ color: "rgba(255,255,255,0.7)", fontSize: 13 }} numberOfLines={1}>{traduzir(g.nome)}</Text>
+                  <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                    <Text style={{ color: "rgba(255,255,255,0.35)", fontSize: 11 }}>{fmtValor(g.valor)}</Text>
+                    <Text style={{ color: g.cor, fontSize: 13, fontWeight: "700", minWidth: 36, textAlign: "right" }}>{g.percentual}%</Text>
+                  </View>
+                </View>
+                <View style={{ height: 6, backgroundColor: "rgba(255,255,255,0.08)", borderRadius: 3 }}>
+                  <View style={{ height: 6, width: `${g.percentual}%`, backgroundColor: g.cor, borderRadius: 3 }} />
+                </View>
+              </View>
+            ))}
+          </View>
+        )}
+      </View>
+
+      {/* Transações do mês */}
+      <View style={[styles.transacoesCard, { marginBottom: 20 }]}>
+        <View style={styles.transacoesCardHeader}>
+          <Text style={styles.transacoesCardTitle}>Transações do mês</Text>
+        </View>
+        {txMesSelecionado.length === 0 ? (
+          <View style={styles.transacoesCardVazio}>
+            <Text style={styles.transacoesCardVazioText}>Nenhuma transação neste mês</Text>
+          </View>
+        ) : txMesSelecionado.map((t, i) => (
+          <View key={t.id} style={[styles.transacoesCardItem, i < txMesSelecionado.length - 1 && styles.transacoesCardItemBorder]}>
+            <View style={t.tipo === "DEBIT" ? styles.transacoesCardIconeDebito : styles.transacoesCardIconeCredito}>
+              <Text style={{ color: t.tipo === "DEBIT" ? "#e85555" : "#3ac97e", fontSize: 14 }}>
+                {t.tipo === "DEBIT" ? "↓" : "↑"}
+              </Text>
+            </View>
+            <View style={styles.transacoesCardInfo}>
+              <Text style={styles.transacoesCardDescricao} numberOfLines={1}>{t.descricao || "—"}</Text>
+              <Text style={styles.transacoesCardMeta}>{traduzir(t.categoria)}{t.categoria && t.data ? "  ·  " : ""}{t.data ? new Date(t.data+"T00:00:00").toLocaleDateString("pt-BR",{day:"2-digit",month:"short"}) : ""}</Text>
+            </View>
+            <Text style={t.tipo === "DEBIT" ? styles.transacoesCardValorDebito : styles.transacoesCardValorCredito}>
+              {t.tipo === "DEBIT" ? "-" : "+"}{fmtValor(Math.abs(t.valor))}
+            </Text>
+          </View>
+        ))}
+      </View>
+
+      {/* Resumo por categoria */}
+      <View style={styles.transacoesCard}>
+        <View style={styles.transacoesCardHeader}>
+          <Text style={styles.transacoesCardTitle}>Movimentações por categoria</Text>
+        </View>
+        {topCategorias.length === 0 ? (
+          <View style={styles.transacoesCardVazio}><Text style={styles.transacoesCardVazioText}>Sem dados</Text></View>
+        ) : topCategorias.map(([cat, vals], i) => (
+          <View key={cat} style={[styles.transacoesCardItem, i < topCategorias.length - 1 && styles.transacoesCardItemBorder]}>
+            <View style={styles.transacoesCardInfo}>
+              <Text style={styles.transacoesCardDescricao} numberOfLines={1}>{traduzir(cat)}</Text>
+              <Text style={styles.transacoesCardMeta}>
+                {vals.receitas > 0 ? `+${fmtValor(vals.receitas)}` : ""}
+                {vals.receitas > 0 && vals.despesas > 0 ? "  ·  " : ""}
+                {vals.despesas > 0 ? `-${fmtValor(vals.despesas)}` : ""}
+              </Text>
+            </View>
+            <Text style={vals.despesas > vals.receitas ? styles.transacoesCardValorDebito : styles.transacoesCardValorCredito}>
+              {fmtValor(vals.receitas + vals.despesas)}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </ScrollView>
   );
 }
 
-// ── Patrimônio ────────────────────────────────────────────────────
+
+// ── Patrimônio
 function PatrimonioContent({ styles }) {
   const {
     patrimonios,
@@ -1056,9 +1361,6 @@ function PatrimonioContent({ styles }) {
                 i < patrimonios.length - 1 && styles.transacoesCardItemBorder,
               ]}
             >
-              <View style={styles.transacoesCardIconeCredito}>
-                <Text style={{ fontSize: 16 }}>🏠</Text>
-              </View>
               <View style={styles.transacoesCardInfo}>
                 <Text style={styles.transacoesCardDescricao}>{p.nome}</Text>
                 <Text style={styles.transacoesCardMeta}>
@@ -1077,40 +1379,7 @@ function PatrimonioContent({ styles }) {
           ))
         )}
       </View>
-
-      {loans.length > 0 && (
-        <View style={[styles.transacoesCard, { marginBottom: 20 }]}>
-          <View style={styles.transacoesCardHeader}>
-            <Text style={styles.transacoesCardTitle}>
-              Empréstimos e Financiamentos
-            </Text>
-          </View>
-          {loans.map((l, i) => (
-            <View
-              key={l.id}
-              style={[
-                styles.transacoesCardItem,
-                i < loans.length - 1 && styles.transacoesCardItemBorder,
-              ]}
-            >
-              <View style={styles.transacoesCardIconeDebito}>
-                <Text style={{ fontSize: 14 }}>📋</Text>
-              </View>
-              <View style={styles.transacoesCardInfo}>
-                <Text style={styles.transacoesCardDescricao}>{l.nome}</Text>
-                {l.parcelas && (
-                  <Text style={styles.transacoesCardMeta}>
-                    Parcelas: {l.parcelas}
-                  </Text>
-                )}
-              </View>
-              <Text style={styles.transacoesCardValorDebito}>
-                -{formatarValor(l.saldo_devedor)}
-              </Text>
-            </View>
-          ))}
-        </View>
-      )}
+        
 
       {contasCredito.filter((c) => c.saldo < 0).length > 0 && (
         <View style={styles.transacoesCard}>
@@ -1128,9 +1397,6 @@ function PatrimonioContent({ styles }) {
                     styles.transacoesCardItemBorder,
                 ]}
               >
-                <View style={styles.transacoesCardIconeDebito}>
-                  <Text style={{ fontSize: 14 }}>💳</Text>
-                </View>
                 <View style={styles.transacoesCardInfo}>
                   <Text style={styles.transacoesCardDescricao}>{c.nome}</Text>
                   {c.numero && (
@@ -1150,7 +1416,7 @@ function PatrimonioContent({ styles }) {
   );
 }
 
-// ── Menu principal ────────────────────────────────────────────────
+// ── Menu principal
 export function Menu({ navigation, activeRoute = "Dashboard", children }) {
   const styles = useMenuStyles();
   const { width } = useWindowDimensions();
@@ -1181,6 +1447,21 @@ export function Menu({ navigation, activeRoute = "Dashboard", children }) {
             carregando={carregando}
             totalReceitas={totalReceitas}
             totalDespesas={totalDespesas}
+            saldoTotal={saldoTotal}
+            salario={salario}
+          />
+        );
+      case "Relatorios":
+        return (
+          <RelatoriosContent
+            styles={styles}
+            transacoes={transacoes}
+            dadosGrafico={dadosGrafico}
+            gastosPorCategoria={gastosPorCategoria}
+            totalReceitas={totalReceitas}
+            totalDespesas={totalDespesas}
+            carregando={carregando}
+            saldoTotal={saldoTotal}
           />
         );
       case "Patrimonio":
@@ -1209,6 +1490,7 @@ export function Menu({ navigation, activeRoute = "Dashboard", children }) {
             nomeUsuario={nomeUsuario}
             dadosGrafico={dadosGrafico}
             gastosPorCategoria={gastosPorCategoria}
+            totalReceitas={totalReceitas}
             totalDespesas={totalDespesas}
           />
         );
