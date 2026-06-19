@@ -1,11 +1,8 @@
 import { StyleSheet, Dimensions, Platform } from "react-native";
-import { color } from "../../Global/color";
 
-const c = color.colors;
 const { width } = Dimensions.get('window');
 
 const BREAKPOINTS = { mobile: 0, tablet: 768, desktop: 1024, wide: 1440 };
-
 const isMobile = width < BREAKPOINTS.tablet;
 const isTablet = width >= BREAKPOINTS.tablet && width < BREAKPOINTS.desktop;
 const isDesktop = width >= BREAKPOINTS.desktop;
@@ -16,16 +13,33 @@ const responsive = (mobile, tablet = mobile, desktop = tablet) => {
   return desktop;
 };
 
+// ── Tokens ────────────────────────────────────────────────────────
+const t = {
+  bg:        "#07090f",       // azul-noite profundo
+  bgCard:    "#0e1118",       // card levemente mais claro
+  bgCardHov: "#131720",
+  green:     "#1db06a",       // verde mais maduro, menos néon
+  greenDim:  "#155e3d",       // verde escuro para bordas
+  greenGlow: "rgba(29,176,106,0.18)",
+  gold:      "#c4943a",       // dourado para números/dinheiro
+  goldDim:   "rgba(196,148,58,0.15)",
+  white:     "#f0f4ff",       // branco levemente azulado
+  muted:     "rgba(220,228,255,0.82)",
+  mutedLow:  "rgba(220,228,255,0.55)",
+  border:    "rgba(200,210,240,0.07)",
+  borderGreen: "rgba(29,176,106,0.35)",
+};
+
 export const styles = StyleSheet.create({
 
-  containerMain: { flex: 1, backgroundColor: "#0a0d0f" },
+  containerMain: { flex: 1, backgroundColor: t.bg },
 
-  // ── Hero ──────────────────────────────────
+  // ── Hero ──────────────────────────────────────────────────────
   containerHero: {
-    backgroundColor: "#0a0d0f",
-    paddingHorizontal: responsive(24, 48, 80),
-    paddingTop: responsive(64, 80, 100),
-    paddingBottom: responsive(40, 56, 80),
+    backgroundColor: t.bg,
+    paddingHorizontal: responsive(24, 48, 88),
+    paddingTop: responsive(72, 88, 112),
+    paddingBottom: responsive(48, 64, 88),
     maxWidth: isDesktop ? 1440 : '100%',
     alignSelf: 'center',
     width: '100%',
@@ -33,80 +47,85 @@ export const styles = StyleSheet.create({
 
   badgeOpenFinance: {
     alignSelf: "flex-start",
-    backgroundColor: "transparent",
+    backgroundColor: t.greenDim + "33",
     borderWidth: 1,
-    borderColor: "rgba(58,201,126,0.5)",
-    borderRadius: 20,
-    paddingHorizontal: responsive(14, 16, 18),
-    paddingVertical: responsive(7, 8, 9),
-    marginBottom: responsive(24, 28, 32),
+    borderColor: t.borderGreen,
+    borderRadius: 6,
+    paddingHorizontal: responsive(12, 14, 16),
+    paddingVertical: responsive(5, 6, 7),
+    marginBottom: responsive(28, 36, 44),
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
   },
 
   badgeOpenFinanceText: {
-    fontSize: responsive(12, 13, 14),
+    fontSize: responsive(11, 12, 12),
     fontWeight: "600",
-    color: c.success,
-    letterSpacing: 0.3,
+    color: t.green,
+    letterSpacing: 1.2,
+    textTransform: "uppercase",
   },
 
   heroTitle: {
-    fontSize: responsive(44, 56, 72),
-    fontWeight: "800",
-    color: c.white,
-    lineHeight: responsive(50, 64, 82),
-    marginBottom: responsive(20, 28, 32),
+    fontSize: responsive(52, 68, 88),
+    fontWeight: "900",
+    color: t.white,
+    lineHeight: responsive(56, 74, 94),
+    marginBottom: responsive(24, 32, 36),
+    letterSpacing: -2,
     textAlign: "left",
   },
 
-  heroTitleSegredos: { color: c.success, fontWeight: "800" },
+  heroTitleSegredos: {
+    color: t.green,
+    fontWeight: "900",
+  },
 
   heroSubtitle: {
-    fontSize: responsive(15, 16, 18),
-    color: "rgba(255,255,255,0.5)",
-    lineHeight: responsive(24, 26, 30),
-    marginBottom: responsive(36, 44, 52),
+    fontSize: responsive(16, 17, 19),
+    color: t.muted,
+    lineHeight: responsive(26, 28, 32),
+    marginBottom: responsive(40, 48, 56),
     textAlign: "left",
+    maxWidth: 540,
   },
 
   headerTop: {
     flexDirection: "row",
     justifyContent: "flex-start",
     alignItems: "center",
-    gap: 16,
-    marginBottom: responsive(24, 32, 40),
+    gap: 20,
+    marginBottom: responsive(32, 40, 52),
     flexWrap: "wrap",
   },
 
   logo: {
-    width: responsive(200, 220, 260),
-    height: responsive(80, 90, 110),
+    width: responsive(180, 210, 240),
+    height: responsive(72, 84, 96),
     resizeMode: "contain",
   },
 
-  // ── Botões ────────────────────────────────
   containerButtons: {
     backgroundColor: "transparent",
     flexDirection: responsive("column", "row", "row"),
     justifyContent: "flex-start",
     alignItems: responsive("stretch", "center", "center"),
-    gap: responsive(12, 16, 20),
+    gap: responsive(12, 16, 16),
     width: "100%",
   },
 
-  // ── Stats ─────────────────────────────────
+  // ── Stats ─────────────────────────────────────────────────────
   containerStats: {
-    backgroundColor: "#0a0d0f",
-    paddingHorizontal: responsive(24, 48, 80),
-    paddingBottom: responsive(56, 64, 80),
-    paddingTop: responsive(8, 16, 24),
+    backgroundColor: t.bg,
+    paddingHorizontal: responsive(24, 48, 88),
+    paddingBottom: responsive(64, 72, 88),
+    paddingTop: responsive(16, 24, 32),
     borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.08)",
+    borderTopColor: t.border,
     flexDirection: responsive("column", "row", "row"),
-    justifyContent: responsive("flex-start", "center", "flex-start"),
-    gap: responsive(24, 40, 60),
+    justifyContent: responsive("flex-start", "flex-start", "flex-start"),
+    gap: responsive(32, 56, 80),
     maxWidth: isDesktop ? 1440 : '100%',
     alignSelf: 'center',
     width: '100%',
@@ -115,24 +134,26 @@ export const styles = StyleSheet.create({
   statItem: { flexDirection: "column", gap: 4, alignItems: "flex-start" },
 
   statNumber: {
-    fontSize: responsive(28, 32, 36),
-    fontWeight: "700",
-    color: c.white,
+    fontSize: responsive(36, 44, 52),
+    fontWeight: "800",
+    color: t.gold,       // dourado — números de dinheiro/valor
+    letterSpacing: -1,
   },
 
   statLabel: {
     fontSize: responsive(12, 13, 14),
-    color: "rgba(255,255,255,0.4)",
-    fontWeight: "400",
+    color: t.mutedLow,
+    fontWeight: "500",
+    letterSpacing: 0.3,
   },
 
-  // ── Funcionalidades header ─────────────────
+  // ── Section header genérico ────────────────────────────────────
   containerSectionHeader: {
     alignItems: "center",
-    backgroundColor: "#0a0d0f",
-    paddingHorizontal: responsive(24, 48, 80),
-    paddingTop: responsive(48, 56, 64),   // ← reduzido (era 64/80/10)
-    paddingBottom: responsive(28, 36, 44),
+    backgroundColor: t.bg,
+    paddingHorizontal: responsive(24, 48, 88),
+    paddingTop: responsive(56, 64, 80),
+    paddingBottom: responsive(32, 40, 48),
     maxWidth: isDesktop ? 1440 : '100%',
     alignSelf: 'center',
     width: '100%',
@@ -140,12 +161,12 @@ export const styles = StyleSheet.create({
 
   sectionTag: {
     alignSelf: "center",
-    backgroundColor: "transparent",
+    backgroundColor: t.greenDim + "22",
     borderWidth: 1,
-    borderColor: "rgba(58,201,126,0.5)",
-    borderRadius: 20,
-    paddingHorizontal: responsive(14, 16, 18),
-    paddingVertical: responsive(7, 8, 9),
+    borderColor: t.borderGreen,
+    borderRadius: 6,
+    paddingHorizontal: responsive(12, 14, 16),
+    paddingVertical: responsive(5, 6, 7),
     marginBottom: 20,
     flexDirection: "row",
     alignItems: "center",
@@ -153,66 +174,67 @@ export const styles = StyleSheet.create({
   },
 
   sectionTagText: {
-    fontSize: responsive(11, 12, 13),
+    fontSize: responsive(10, 11, 11),
     fontWeight: "700",
-    color: c.success,
-    letterSpacing: 1,
+    color: t.green,
+    letterSpacing: 1.5,
     textTransform: "uppercase",
   },
 
   sectionTitle: {
-    fontSize: responsive(34, 42, 52),
+    fontSize: responsive(36, 46, 56),
     fontWeight: "800",
-    color: c.white,
-    marginBottom: 14,
-    lineHeight: responsive(40, 50, 60),
+    color: t.white,
+    marginBottom: 16,
+    lineHeight: responsive(42, 54, 64),
     textAlign: "center",
+    letterSpacing: -1,
     maxWidth: isDesktop ? 800 : '100%',
   },
 
-  sectionTitleHighlight: { color: c.success, fontWeight: "800" },
+  sectionTitleHighlight: { color: t.green, fontWeight: "800" },
 
   sectionSubtitle: {
     fontSize: responsive(14, 15, 16),
-    color: "rgba(255, 255, 255, 0.94)",
-    lineHeight: responsive(22, 24, 26),
+    color: t.muted,
+    lineHeight: responsive(22, 25, 28),
     textAlign: "center",
-    maxWidth: isDesktop ? 700 : '100%',
+    maxWidth: isDesktop ? 640 : '100%',
   },
 
-  // ── Grid Funcionalidades ───────────────────
+  // ── Grid Funcionalidades ───────────────────────────────────────
   containerFuncionalidades: {
-    backgroundColor: "#0a0d0f",
-    paddingHorizontal: responsive(16, 32, 20),
-    paddingBottom: responsive(16, 24, 32),  // ← mínimo
+    backgroundColor: t.bg,
+    paddingHorizontal: responsive(16, 32, 88),
+    paddingBottom: responsive(16, 24, 32),
     flexDirection: isDesktop ? "row" : "column",
     flexWrap: isDesktop ? "wrap" : "nowrap",
     justifyContent: "space-between",
     alignItems: "flex-start",
-    gap: responsive(12, 16, 20),
+    gap: responsive(12, 16, 16),
     maxWidth: isDesktop ? 1440 : "100%",
     alignSelf: "center",
     width: "100%",
   },
 
-  // ── Como Funciona header ───────────────────
+  // ── Como Funciona header ───────────────────────────────────────
   containerComoFuncionaHeader: {
-    backgroundColor: "#0a0d0f",
+    backgroundColor: t.bg,
     alignItems: "center",
-    paddingHorizontal: responsive(24, 48, 80),
-    paddingTop: responsive(16, 24, 32),    // ← mínimo
-    paddingBottom: responsive(36, 44, 56),
+    paddingHorizontal: responsive(24, 48, 88),
+    paddingTop: responsive(24, 32, 48),
+    paddingBottom: responsive(40, 48, 60),
     maxWidth: isDesktop ? 1440 : '100%',
     alignSelf: 'center',
     width: '100%',
   },
 
-  // ── Passos em linha ───────────────────────
+  // ── Passos ────────────────────────────────────────────────────
   containerPassos: {
-    backgroundColor: "#0a0d0f",
-    paddingHorizontal: responsive(24, 48, 80),
-    paddingBottom: responsive(56, 64, 80),
-    gap: responsive(14, 20, 24),
+    backgroundColor: t.bg,
+    paddingHorizontal: responsive(24, 48, 88),
+    paddingBottom: responsive(64, 72, 96),
+    gap: responsive(12, 16, 20),
     flexDirection: responsive("column", "row", "row"),
     flexWrap: "nowrap",
     justifyContent: "center",
@@ -225,56 +247,56 @@ export const styles = StyleSheet.create({
   cardPasso: {
     flex: isDesktop ? 1 : undefined,
     width: isMobile ? "100%" : undefined,
-    backgroundColor: "#141820",
-    borderRadius: responsive(20, 24, 28),
+    backgroundColor: t.bgCard,
+    borderRadius: responsive(16, 20, 20),
     borderWidth: 1,
-    borderColor: "#ffffff0f",
+    borderColor: t.border,
     padding: responsive(20, 24, 28),
     alignItems: "center",
     gap: 14,
   },
 
   passoBadge: {
-    width: responsive(48, 56, 64),
-    height: responsive(48, 56, 64),
-    borderRadius: 999,
-    backgroundColor: c.success,
+    width: responsive(44, 52, 56),
+    height: responsive(44, 52, 56),
+    borderRadius: 12,              // quadrado arredondado, não círculo
+    backgroundColor: t.greenDim,
+    borderWidth: 1,
+    borderColor: t.borderGreen,
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: c.success,
-    shadowOpacity: 0.35,
-    shadowRadius: 18,
-    elevation: 10,
   },
 
   passoText: {
-    color: c.white,
-    fontSize: responsive(20, 24, 28),
-    fontWeight: "900",
+    color: t.green,
+    fontSize: responsive(18, 22, 24),
+    fontWeight: "800",
+    letterSpacing: -0.5,
   },
 
   passoContent: { alignItems: "center", gap: 8 },
 
   passoTitle: {
-    color: c.white,
-    fontSize: responsive(14, 16, 18),
+    color: t.white,
+    fontSize: responsive(14, 15, 16),
     fontWeight: "700",
     textAlign: "center",
+    letterSpacing: -0.2,
   },
 
   passoDesc: {
-    color: "#ffffff73",
+    color: t.muted,
     fontSize: responsive(12, 13, 14),
-    lineHeight: responsive(19, 21, 23),
+    lineHeight: responsive(19, 21, 22),
     textAlign: "center",
   },
 
-  // ── Planos header ─────────────────────────
+  // ── Planos header ─────────────────────────────────────────────
   containerPlanosHeader: {
-    backgroundColor: "#0a0d0f",
-    paddingHorizontal: responsive(24, 48, 80),
-    paddingTop: responsive(56, 64, 80),
-    paddingBottom: responsive(28, 36, 44),
+    backgroundColor: t.bg,
+    paddingHorizontal: responsive(24, 48, 88),
+    paddingTop: responsive(64, 72, 88),
+    paddingBottom: responsive(32, 40, 48),
     alignItems: "center",
     maxWidth: isDesktop ? 1440 : '100%',
     alignSelf: 'center',
@@ -283,12 +305,12 @@ export const styles = StyleSheet.create({
 
   sectionTagCenter: {
     alignSelf: "center",
-    backgroundColor: "transparent",
+    backgroundColor: t.greenDim + "22",
     borderWidth: 1,
-    borderColor: "rgba(58,201,126,0.5)",
-    borderRadius: 20,
-    paddingHorizontal: responsive(14, 16, 18),
-    paddingVertical: responsive(7, 8, 9),
+    borderColor: t.borderGreen,
+    borderRadius: 6,
+    paddingHorizontal: responsive(12, 14, 16),
+    paddingVertical: responsive(5, 6, 7),
     marginBottom: 20,
     flexDirection: "row",
     alignItems: "center",
@@ -296,89 +318,93 @@ export const styles = StyleSheet.create({
   },
 
   sectionTitleCenter: {
-    fontSize: responsive(36, 44, 56),
+    fontSize: responsive(36, 46, 56),
     fontWeight: "800",
-    color: c.white,
+    color: t.white,
     marginBottom: 12,
     textAlign: "center",
-    lineHeight: responsive(42, 52, 64),
+    lineHeight: responsive(42, 52, 62),
+    letterSpacing: -1,
   },
 
   sectionSubtitleCenter: {
     fontSize: responsive(14, 15, 16),
-    color: "rgba(255,255,255,0.45)",
-    lineHeight: responsive(22, 24, 26),
+    color: t.muted,
+    lineHeight: responsive(22, 24, 28),
     textAlign: "center",
     paddingHorizontal: 8,
-    maxWidth: isDesktop ? 700 : '100%',
+    maxWidth: isDesktop ? 600 : '100%',
   },
 
-  // ── Cards Planos ──────────────────────────
+  // ── Cards Planos ──────────────────────────────────────────────
   containerPlanos: {
-    backgroundColor: "#0a0d0f",
+    backgroundColor: t.bg,
     paddingHorizontal: responsive(16, 32, 60),
-    paddingBottom: responsive(64, 80, 100),
+    paddingBottom: responsive(72, 88, 112),
     paddingTop: 8,
     flexDirection: responsive("column", "column", "row"),
     justifyContent: "center",
     alignItems: responsive("center", "center", "stretch"),
-    gap: responsive(14, 18, 20),
-    width: responsive("100%", "90%", "80%"),  // ← menor (era 85%)
-    maxWidth: isDesktop ? 1000 : '100%',       // ← menor (era 1200)
+    gap: responsive(14, 18, 16),
+    width: responsive("100%", "90%", "80%"),
+    maxWidth: isDesktop ? 960 : '100%',
     alignSelf: "center",
   },
 
   cardPlano: {
     flex: isDesktop ? 1 : undefined,
     width: isMobile ? '100%' : isTablet ? '80%' : undefined,
-    maxWidth: isMobile ? 380 : undefined,
-    backgroundColor: "#141820",
-    borderRadius: responsive(20, 24, 28),      // ← menor (era 24/28/32)
+    maxWidth: isMobile ? 400 : undefined,
+    backgroundColor: t.bgCard,
+    borderRadius: responsive(16, 18, 20),
     borderWidth: 1,
-    borderColor: "rgba(255,255,255,0.08)",
-    padding: responsive(18, 22, 24),           // ← menor (era 22/26/30)
+    borderColor: t.border,
+    padding: responsive(20, 24, 28),
   },
 
   cardPlanoDestaque: {
     flex: isDesktop ? 1 : undefined,
     width: isMobile ? '100%' : isTablet ? '80%' : undefined,
-    maxWidth: isMobile ? 380 : undefined,
-    backgroundColor: "#141820",
-    borderRadius: responsive(20, 24, 28),
-    borderWidth: 1.5,
-    borderColor: c.success,
-    padding: responsive(18, 22, 24),
+    maxWidth: isMobile ? 400 : undefined,
+    backgroundColor: t.bgCard,
+    borderRadius: responsive(16, 18, 20),
+    borderWidth: 1,
+    borderColor: t.green,          // borda verde sólida no destaque
+    padding: responsive(20, 24, 28),
     ...(isDesktop && {
-      transform: [{ scale: 1.04 }],
-      shadowColor: c.success,
-      shadowOpacity: 0.2,
-      shadowRadius: 20,
-      elevation: 8,
+      transform: [{ scale: 1.03 }],
+      shadowColor: t.green,
+      shadowOpacity: 0.25,
+      shadowRadius: 24,
+      elevation: 10,
     }),
   },
 
   planoMaisPopular: {
     alignSelf: "center",
-    backgroundColor: c.success,
-    borderRadius: 20,
-    paddingHorizontal: responsive(16, 18, 20),
-    paddingVertical: responsive(5, 6, 7),
-    marginBottom: 16,
+    backgroundColor: t.green,
+    borderRadius: 6,
+    paddingHorizontal: responsive(14, 16, 18),
+    paddingVertical: responsive(4, 5, 6),
+    marginBottom: 18,
   },
 
   planoMaisPopularText: {
-    fontSize: responsive(11, 12, 13),
+    fontSize: responsive(10, 11, 11),
     fontWeight: "700",
-    color: c.white,
-    letterSpacing: 0.3,
+    color: "#07090f",              // texto escuro sobre verde
+    letterSpacing: 1,
+    textTransform: "uppercase",
   },
 
   planoNome: {
-    fontSize: responsive(16, 18, 20),
-    fontWeight: "700",
-    color: c.white,
+    fontSize: responsive(14, 16, 17),
+    fontWeight: "600",
+    color: t.muted,
     marginBottom: 12,
     textAlign: "center",
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
   },
 
   planoPrecoRow: {
@@ -392,62 +418,64 @@ export const styles = StyleSheet.create({
   planoPrecoSimbolo: {
     fontSize: responsive(16, 18, 20),
     fontWeight: "500",
-    color: "rgba(255,255,255,0.6)",
-    marginBottom: responsive(8, 10, 12),
+    color: t.gold,
+    marginBottom: responsive(10, 12, 14),
   },
 
   planoPrecoValor: {
-    fontSize: responsive(48, 56, 64),        // ← menor (era 56/64/72)
-    fontWeight: "700",
-    color: c.white,
-    lineHeight: responsive(52, 60, 68),
+    fontSize: responsive(52, 60, 68),
+    fontWeight: "800",
+    color: t.white,
+    lineHeight: responsive(56, 64, 72),
+    letterSpacing: -2,
   },
 
   planoPrecoMes: {
-    fontSize: responsive(16, 17, 18),
-    color: "rgba(255,255,255,0.6)",
-    marginBottom: responsive(8, 10, 12),
+    fontSize: responsive(14, 15, 16),
+    color: t.mutedLow,
+    marginBottom: responsive(10, 12, 14),
   },
 
   planoPeriodo: {
-    fontSize: responsive(12, 13, 14),
-    color: "rgba(255,255,255,0.4)",
+    fontSize: responsive(11, 12, 13),
+    color: t.mutedLow,
     textAlign: "center",
     marginBottom: 20,
+    letterSpacing: 0.3,
   },
 
   planoDivisor: {
     height: 1,
-    backgroundColor: "rgba(255,255,255,0.08)",
+    backgroundColor: t.border,
     marginBottom: 20,
   },
 
   planoFeatures: {
-    gap: responsive(12, 14, 16),
+    gap: responsive(12, 14, 14),
     marginBottom: responsive(24, 28, 32),
   },
 
   planoFeatureItem: {
-    fontSize: responsive(13, 14, 15),
-    color: "rgba(255,255,255,0.7)",
-    lineHeight: responsive(19, 21, 23),
+    fontSize: responsive(13, 14, 14),
+    color: t.muted,
+    lineHeight: responsive(20, 22, 22),
   },
 
   planoFeatureItemDestaque: {
-    fontSize: responsive(13, 14, 15),
-    color: c.white,
-    lineHeight: responsive(19, 21, 23),
+    fontSize: responsive(13, 14, 14),
+    color: t.white,
+    lineHeight: responsive(20, 22, 22),
   },
 
-  // ── Footer ────────────────────────────────
+  // ── Footer ────────────────────────────────────────────────────
   containerFooter: {
-    backgroundColor: "#0a0d0f",
-    paddingHorizontal: responsive(24, 48, 80),
-    paddingTop: responsive(32, 40, 48),
-    paddingBottom: responsive(44, 52, 60),
+    backgroundColor: t.bg,
+    paddingHorizontal: responsive(24, 48, 88),
+    paddingTop: responsive(36, 44, 52),
+    paddingBottom: responsive(48, 56, 64),
     borderTopWidth: 1,
-    borderTopColor: "rgba(255,255,255,0.07)",
-    gap: responsive(12, 14, 16),
+    borderTopColor: t.border,
+    gap: responsive(12, 14, 14),
     maxWidth: isDesktop ? 1440 : '100%',
     alignSelf: 'center',
     width: '100%',
@@ -455,18 +483,18 @@ export const styles = StyleSheet.create({
   },
 
   footerLogo: {
-    fontSize: responsive(18, 20, 22),
+    fontSize: responsive(16, 18, 20),
     fontWeight: "800",
-    color: c.white,
-    letterSpacing: 1,
+    color: t.white,
+    letterSpacing: 2,
     textTransform: "uppercase",
   },
 
-  footerLogoTrack: { color: c.warning },
+  footerLogoTrack: { color: t.gold },
 
   footerCopyright: {
-    fontSize: responsive(12, 13, 14),
-    color: "rgba(255,255,255,0.35)",
+    fontSize: responsive(11, 12, 13),
+    color: t.mutedLow,
     textAlign: responsive("center", "center", "left"),
   },
 
@@ -478,8 +506,8 @@ export const styles = StyleSheet.create({
   },
 
   footerLink: {
-    fontSize: responsive(13, 14, 15),
-    color: "rgba(255,255,255,0.45)",
+    fontSize: responsive(12, 13, 14),
+    color: t.mutedLow,
     fontWeight: "500",
   },
 });

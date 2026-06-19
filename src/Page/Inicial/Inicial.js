@@ -18,7 +18,6 @@ import target from "../../assets/Funcionalidades/target.svg";
 import FundoMenu from "../../assets/fundo_menu.png";
 import { styles } from "./styles";
 
-// Resolve o caminho da imagem para uso no <img> HTML
 const fundoMenuSrc =
   Platform.OS === "web"
     ? typeof FundoMenu === "string"
@@ -27,7 +26,6 @@ const fundoMenuSrc =
     : null;
 
 function MockupImage({ isDesktop }) {
-  // Na web usa <img> com mix-blend-mode para remover o fundo branco
   if (Platform.OS === "web") {
     return (
       <img
@@ -43,7 +41,6 @@ function MockupImage({ isDesktop }) {
       />
     );
   }
-  // No mobile
   return (
     <Image
       source={FundoMenu}
@@ -62,10 +59,10 @@ export function Inicial({ navigation }) {
   const isDesktop = width >= 1024;
 
   const passos = [
-    { n: "1", title: "Crie sua conta", desc: "Cadastro em 60 segundos com e-mail ou Google." },
-    { n: "2", title: "Conecte bancos", desc: "Autorize acesso seguro via Open Finance." },
-    { n: "3", title: "Visualize tudo", desc: "Saldos, extratos e análises em um só painel." },
-    { n: "4", title: "Conquiste metas", desc: "Defina objetivos e receba suporte da IA para alcançá-los." },
+    { n: "1", title: "Crie sua conta", desc: "Cadastro em menos de um minuto. Sem cartão de crédito." },
+    { n: "2", title: "Conecte seus bancos", desc: "Autorize via Open Finance regulado pelo Banco Central." },
+    { n: "3", title: "Veja tudo junto", desc: "Saldos, extratos e análises de todas as contas em um painel." },
+    { n: "4", title: "Alcance suas metas", desc: "Defina objetivos e acompanhe o progresso com a IA." },
   ];
 
   return (
@@ -77,7 +74,6 @@ export function Inicial({ navigation }) {
           styles.containerHero,
           isDesktop && { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
         ]}>
-          {/* Texto */}
           <View style={isDesktop ? { flex: 1, maxWidth: "52%" } : {}}>
             <View style={styles.headerTop}>
               <Image source={Logo} style={styles.logo} resizeMode="contain" />
@@ -87,22 +83,21 @@ export function Inicial({ navigation }) {
             </View>
 
             <Text style={[styles.heroTitle, isDesktop && { maxWidth: "100%" }]}>
-              SEU DINHEIRO{"\n"}COM CLAREZA{"\n"}E{" "}
-              <Text style={styles.heroTitleSegredos}>CONTROLE</Text>
+              ENTENDA{"\n"}PARA ONDE{"\n"}VAI SEU{" "}
+              <Text style={styles.heroTitleSegredos}>DINHEIRO</Text>
             </Text>
 
             <Text style={[styles.heroSubtitle, isDesktop && { maxWidth: "100%" }]}>
-              Conecte todos os seus bancos, entenda seus gastos e conquiste
-              metas reais — tudo em um só lugar, com segurança bancária.
+              Conecte todos os seus bancos e veja saldos, gastos e metas
+              em um só lugar — com a segurança do Open Finance.
             </Text>
 
             <View style={[styles.containerButtons, { paddingHorizontal: 0, marginTop: 0, marginBottom: 0 }]}>
-              <Button title="Começar agora — grátis" style={{ minWidth: 240 }} onPress={() => navigation.navigate("Cadastro")} />
+              <Button title="Começar grátis" style={{ minWidth: 200 }} onPress={() => navigation.navigate("Cadastro")} />
               <Button title="Já tenho conta" style={{ minWidth: 160 }} onPress={() => navigation.navigate("Login")} />
             </View>
           </View>
 
-          {/* Mockup */}
           <View style={isDesktop
             ? { flex: 1, alignItems: "center", justifyContent: "center" }
             : { alignItems: "center", marginTop: 40 }
@@ -114,12 +109,12 @@ export function Inicial({ navigation }) {
         {/* ── Stats ── */}
         <View style={styles.containerStats}>
           <View style={styles.statItem}>
-            <Text style={styles.statNumber}>47 mil+</Text>
+            <Text style={styles.statNumber}>47 mil</Text>
             <Text style={styles.statLabel}>usuários ativos</Text>
           </View>
           <View style={styles.statItem}>
             <Text style={styles.statNumber}>R$ 2 bi</Text>
-            <Text style={styles.statLabel}>monitorado</Text>
+            <Text style={styles.statLabel}>monitorado todo mês</Text>
           </View>
           <View style={styles.statItem}>
             <Text style={styles.statNumber}>4,9</Text>
@@ -127,43 +122,43 @@ export function Inicial({ navigation }) {
           </View>
         </View>
 
-        {/* ── Header Funcionalidades ── */}
+        {/* ── Funcionalidades ── */}
         <View style={styles.containerSectionHeader}>
           <View style={styles.sectionTag}>
             <Text style={styles.sectionTagText}>Funcionalidades</Text>
           </View>
           <Text style={styles.sectionTitle}>
-            Tudo o que <Text style={styles.sectionTitleHighlight}>você precisa</Text>
+            Tudo que você precisa,{"\n"}
+            <Text style={styles.sectionTitleHighlight}>sem o que não precisa</Text>
           </Text>
           <Text style={styles.sectionSubtitle}>
-            Controle financeiro completo, intuitivo e seguro — do extrato às metas.
+            Controle financeiro completo, sem planilhas, sem complicação.
           </Text>
         </View>
 
-        {/* ── Grid Funcionalidades ── */}
         <View style={styles.containerFuncionalidades}>
-          <Funcionalidade image={bank} title={"Multi-banco"} func={"Conecte Nubank, Itaú, Bradesco e +200 instituições via Open Finance regulado pelo Banco Central."} />
-          <Funcionalidade image={chartBar} title={"Relatórios Visuais"} func={"Gráficos interativos por categoria, período e conta. Entenda onde seu dinheiro vai."} />
-          <Funcionalidade image={target} title={"Metas Inteligentes"} func={"Defina objetivos, acompanhe progresso e receba alertas para manter o foco."} />
-          <Funcionalidade image={alert} title={"Alertas em Tempo Real"} func={"Notificações de cada transação, limite de gasto e oportunidade de economia."} />
-          <Funcionalidade image={lock} title={"Segurança Bancária"} func={"Criptografia ponta a ponta, biometria e conformidade total com a LGPD."} />
-          <Funcionalidade image={robot} title={"IA Financeira"} func={"Insights personalizados baseados no seu perfil. Economize mais sem esforço."} />
+          <Funcionalidade image={bank} title="Multi-banco" func="Conecte Nubank, Itaú, Bradesco e +200 instituições via Open Finance." />
+          <Funcionalidade image={chartBar} title="Relatórios visuais" func="Gráficos por categoria, período e conta. Entenda onde o dinheiro vai." />
+          <Funcionalidade image={target} title="Metas" func="Defina objetivos, acompanhe o progresso e receba alertas." />
+          <Funcionalidade image={alert} title="Alertas" func="Notificações de cada transação e de limites de gasto." />
+          <Funcionalidade image={lock} title="Segurança" func="Criptografia ponta a ponta e conformidade total com a LGPD." />
+          <Funcionalidade image={robot} title="IA financeira" func="Insights baseados no seu perfil. Economize sem esforço." />
         </View>
 
-        {/* ── Header Como Funciona ── */}
+        {/* ── Como funciona ── */}
         <View style={styles.containerComoFuncionaHeader}>
           <View style={styles.sectionTag}>
             <Text style={styles.sectionTagText}>Como funciona</Text>
           </View>
           <Text style={styles.sectionTitle}>
-            4 passos para o <Text style={styles.sectionTitleHighlight}>controle total</Text>
+            4 passos para{" "}
+            <Text style={styles.sectionTitleHighlight}>controle total</Text>
           </Text>
           <Text style={styles.sectionSubtitle}>
-            Em menos de 3 minutos, você terá todos os seus bancos centralizados.
+            Em menos de 3 minutos, todos os seus bancos centralizados.
           </Text>
         </View>
 
-        {/* ── Passos ── */}
         <View style={styles.containerPassos}>
           {passos.map((p) => (
             <View key={p.n} style={styles.cardPasso}>
@@ -178,18 +173,17 @@ export function Inicial({ navigation }) {
           ))}
         </View>
 
-        {/* ── Header Planos ── */}
+        {/* ── Planos ── */}
         <View style={styles.containerPlanosHeader}>
           <View style={styles.sectionTagCenter}>
             <Text style={styles.sectionTagText}>Planos</Text>
           </View>
           <Text style={styles.sectionTitleCenter}>Escolha seu plano</Text>
           <Text style={styles.sectionSubtitleCenter}>
-            Comece grátis. Upgrade quando quiser. Cancele a qualquer momento.
+            Comece grátis. Faça upgrade quando quiser. Cancele a qualquer momento.
           </Text>
         </View>
 
-        {/* ── Cards Planos ── */}
         <View style={styles.containerPlanos}>
           <View style={styles.cardPlano}>
             <Text style={styles.planoNome}>Gratuito</Text>
@@ -200,12 +194,12 @@ export function Inicial({ navigation }) {
             <Text style={styles.planoPeriodo}>para sempre</Text>
             <View style={styles.planoDivisor} />
             <View style={styles.planoFeatures}>
-              <Text style={styles.planoFeatureItem}>✓ 2 bancos conectados</Text>
-              <Text style={styles.planoFeatureItem}>✓ Histórico de 30 dias</Text>
-              <Text style={styles.planoFeatureItem}>✓ Relatórios básicos</Text>
-              <Text style={styles.planoFeatureItem}>✓ 3 metas ativas</Text>
+              <Text style={styles.planoFeatureItem}>✓  2 bancos conectados</Text>
+              <Text style={styles.planoFeatureItem}>✓  Histórico de 30 dias</Text>
+              <Text style={styles.planoFeatureItem}>✓  Relatórios básicos</Text>
+              <Text style={styles.planoFeatureItem}>✓  3 metas ativas</Text>
             </View>
-            <Button title="Começar grátis" />
+            <Button title="Começar grátis" onPress={() => navigation.navigate("Cadastro")} />
           </View>
 
           <View style={styles.cardPlanoDestaque}>
@@ -221,11 +215,11 @@ export function Inicial({ navigation }) {
             <Text style={styles.planoPeriodo}>cobrado mensalmente</Text>
             <View style={styles.planoDivisor} />
             <View style={styles.planoFeatures}>
-              <Text style={styles.planoFeatureItemDestaque}>✓ Bancos ilimitados</Text>
-              <Text style={styles.planoFeatureItemDestaque}>✓ Histórico completo</Text>
-              <Text style={styles.planoFeatureItemDestaque}>✓ Relatórios avançados</Text>
-              <Text style={styles.planoFeatureItemDestaque}>✓ Metas ilimitadas</Text>
-              <Text style={styles.planoFeatureItemDestaque}>✓ IA Financeira</Text>
+              <Text style={styles.planoFeatureItemDestaque}>✓  Bancos ilimitados</Text>
+              <Text style={styles.planoFeatureItemDestaque}>✓  Histórico completo</Text>
+              <Text style={styles.planoFeatureItemDestaque}>✓  Relatórios avançados</Text>
+              <Text style={styles.planoFeatureItemDestaque}>✓  Metas ilimitadas</Text>
+              <Text style={styles.planoFeatureItemDestaque}>✓  IA financeira</Text>
             </View>
             <Button title="Assinar Pro" />
           </View>
@@ -240,10 +234,10 @@ export function Inicial({ navigation }) {
             <Text style={styles.planoPeriodo}>até 5 membros</Text>
             <View style={styles.planoDivisor} />
             <View style={styles.planoFeatures}>
-              <Text style={styles.planoFeatureItem}>✓ Tudo do Pro</Text>
-              <Text style={styles.planoFeatureItem}>✓ 5 contas familiares</Text>
-              <Text style={styles.planoFeatureItem}>✓ Orçamento familiar</Text>
-              <Text style={styles.planoFeatureItem}>✓ Dashboard compartilhado</Text>
+              <Text style={styles.planoFeatureItem}>✓  Tudo do Pro</Text>
+              <Text style={styles.planoFeatureItem}>✓  5 contas familiares</Text>
+              <Text style={styles.planoFeatureItem}>✓  Orçamento familiar</Text>
+              <Text style={styles.planoFeatureItem}>✓  Dashboard compartilhado</Text>
             </View>
             <Button title="Assinar Família" />
           </View>
